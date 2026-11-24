@@ -2,7 +2,7 @@
 
 [中文](./README.md) | [English](./README.en.md)
 
-ZhouJun 的个人数字门户。站点以 Astro 静态生成，用 Vue 3 岛屿提供搜索、筛选、菜单与主题切换，展示 30 个真实应用、公开动态、博客入口、工具与服务观测记录。全站双语：中文位于根路径，英文位于 `/en/`。视觉采用纸张、墨色与朱红的印刷 / 编辑式语言，深色为默认主题。
+ZhouJun 的个人数字门户。站点以 Astro 静态生成，用 Vue 3 岛屿提供搜索、筛选、菜单与主题切换，展示 30 个真实应用、公开动态、博客入口、工具与服务观测记录。全站双语：中文位于根路径，英文位于 `/en/`。视觉采用纸张、墨色与朱红的印刷 / 编辑式语言，浅色为默认主题。
 
 线上地址：<https://zhoujun.dev>
 
@@ -144,8 +144,8 @@ ZhouJun 的个人数字门户。站点以 Astro 静态生成，用 Vue 3 岛屿�
 
 ### 主题与阅读体验
 
-- 深色默认；`localStorage['z-os-theme']` 保存 `light` / `dark`，刷新后恢复。
-- 首屏前内联脚本设置 `data-theme`，同步更新 `theme-color`，避免闪白 / 闪暗；脚本失败时回退深色。
+- 浅色默认（白色背景）；`localStorage['z-os-theme']` 保存 `light` / `dark`，刷新后恢复。
+- 首屏前内联脚本设置 `data-theme`，同步更新 `theme-color`，避免闪白 / 闪暗；脚本失败时回退浅色。
 - 滚动进度写入 CSS 变量 `--scroll-progress`，页头在滚动超过 10px 后进入紧凑状态。
 - `[data-reveal]` 使用 IntersectionObserver 渐显；`prefers-reduced-motion` 或无 IntersectionObserver 时直接显示。
 - 首页核心内容不依赖 JavaScript；跳过导航链接、可见焦点、语义化标题层级与 320px 起的响应式布局均在 E2E 中检查。
@@ -522,7 +522,7 @@ Cloudflare Pages 仪表盘的 Deployments 列表保留历史部署，可直接�
   - JetBrains Mono Variable：数据、标签与代码感信息；
   - 中文：`PingFang SC` / `Hiragino Sans GB` / `MiSans` / HarmonyOS Sans / 思源黑体 / 微软雅黑等系统链；强调用思源宋体 / 宋体系统链；
   - 全部通过 `@fontsource` 自托管，不依赖外部 CDN。
-- **主题**：深色默认，浅色由本地偏好恢复；两套主题共用 `src/styles/global.css` 的 CSS 变量，不在组件中复制色板。
+- **主题**：浅色（白色背景）默认，深色由本地偏好恢复；两套主题共用 `src/styles/global.css` 的 CSS 变量，不在组件中复制色板。
 - **节奏**：统一的 `section` / `section-compact` / `page-hero` 间距控制纵向节奏，移动端有单独收紧规则。
 - **动效**：滚动进度与渐显均服务内容，且服从 `prefers-reduced-motion`。
 - **中文排版**：`:lang(zh)` 下强制直立，避免浏览器合成斜体；数字与拉丁标签仍用等宽或衬线字体。

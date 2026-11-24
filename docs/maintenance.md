@@ -38,7 +38,7 @@
 
 ## UI 约定
 
-深色为默认主题，浅色主题由用户本地保存。双主题共用 `src/styles/global.css` 的 Token，不在组件中复制一套新颜色。字体通过 `@fontsource-variable` 本地自托管。交互动画服从 `prefers-reduced-motion`。首页内容无需 JavaScript 即可阅读，搜索、筛选和菜单由 Vue 岛屿增强。
+浅色（纯白背景）为默认主题，深色主题由用户本地保存。双主题共用 `src/styles/global.css` 的 Token，不在组件中复制一套新颜色。字体通过 `@fontsource-variable` 本地自托管。交互动画服从 `prefers-reduced-motion`。首页内容无需 JavaScript 即可阅读，搜索、筛选和菜单由 Vue 岛屿增强。
 
 修改 UI 后至少检查 320、375、768、1440px，并分别验证中文根路径与 `/en/` 的浅色/深色、语言切换后路径与查询参数、键盘、无横向溢出、无 JS 内容和 axe。真实浏览器控制台不应出现水合错误或资源 404。
 

@@ -283,18 +283,19 @@ test('main site links to the blog without republishing its articles', async ({ p
 
 test('theme persists across reloads', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: '切换到亮色主题' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await page.evaluate(() =>
-    window.dispatchEvent(new StorageEvent('storage', { key: 'z-os-theme', newValue: 'dark' })),
-  );
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await page.getByRole('button', { name: '切换到亮色主题' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await page.getByRole('button', { name: '切换到暗色主题' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.evaluate(() =>
+    window.dispatchEvent(new StorageEvent('storage', { key: 'z-os-theme', newValue: 'light' })),
+  );
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.getByRole('button', { name: '切换到暗色主题' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.getByRole('button', { name: '切换到亮色主题' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 });
 
 test('mobile navigation opens, closes and navigates in both locales', async ({ page }) => {

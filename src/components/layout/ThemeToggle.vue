@@ -5,7 +5,7 @@ const props = defineProps<{
   switchToLight: string;
   switchToDark: string;
 }>();
-const theme = ref<'dark' | 'light'>('dark');
+const theme = ref<'dark' | 'light'>('light');
 const label = computed(() => (theme.value === 'dark' ? props.switchToLight : props.switchToDark));
 
 function applyTheme(next: 'dark' | 'light', persist = true) {
@@ -20,16 +20,16 @@ function applyTheme(next: 'dark' | 'light', persist = true) {
   }
   document
     .querySelector('meta[name="theme-color"]')
-    ?.setAttribute('content', next === 'light' ? '#F3EEE4' : '#15130F');
+    ?.setAttribute('content', next === 'light' ? '#FFFFFF' : '#15130F');
 }
 
 function onStorage(event: StorageEvent) {
   if (event.key !== 'z-os-theme') return;
-  applyTheme(event.newValue === 'light' ? 'light' : 'dark', false);
+  applyTheme(event.newValue === 'dark' ? 'dark' : 'light', false);
 }
 
 onMounted(() => {
-  theme.value = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+  theme.value = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   window.addEventListener('storage', onStorage);
 });
 

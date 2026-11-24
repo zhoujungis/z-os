@@ -2,7 +2,7 @@
 
 [中文](./README.md) | [English](./README.en.md)
 
-The personal digital portal of ZhouJun. The site is statically generated with Astro and enhanced by Vue 3 islands for search, filtering, navigation and theme switching. It presents 30 real applications, public activity, a blog entry point, tools and service observations. The entire site is bilingual — Chinese at the root paths, English under `/en/`. The visual language is print/editorial: paper, ink and vermilion, with dark mode as the default.
+The personal digital portal of ZhouJun. The site is statically generated with Astro and enhanced by Vue 3 islands for search, filtering, navigation and theme switching. It presents 30 real applications, public activity, a blog entry point, tools and service observations. The entire site is bilingual — Chinese at the root paths, English under `/en/`. The visual language is print/editorial: paper, ink and vermilion, with light mode as the default.
 
 Live site: <https://zhoujun.dev>
 
@@ -144,8 +144,8 @@ Engine requirement: Node.js `>=22` (CI uses 22).
 
 ### Theme and reading experience
 
-- Dark by default; `localStorage['z-os-theme']` stores `light` / `dark` and restores it on reload.
-- A pre-paint inline script sets `data-theme` and updates `theme-color` to avoid a flash of the wrong theme; it falls back to dark if storage fails.
+- Light by default (white background); `localStorage['z-os-theme']` stores `light` / `dark` and restores it on reload.
+- A pre-paint inline script sets `data-theme` and updates `theme-color` to avoid a flash of the wrong theme; it falls back to light if storage fails.
 - Scroll progress is written to the `--scroll-progress` CSS variable; the header compacts after 10px of scroll.
 - `[data-reveal]` elements fade in via IntersectionObserver; with `prefers-reduced-motion` or no IntersectionObserver they are shown immediately.
 - Core homepage content does not depend on JavaScript. Skip links, visible focus, heading hierarchy and responsive layout from 320px up are covered by E2E.
@@ -522,7 +522,7 @@ The Cloudflare Pages dashboard keeps a deployment history under Deployments and 
   - JetBrains Mono Variable for data, labels and code-like information;
   - Chinese: a system stack of PingFang SC / Hiragino Sans GB / MiSans / HarmonyOS Sans / Source Han Sans / Microsoft YaHei; emphasis uses Source Han Serif / Songti system fonts;
   - all self-hosted through `@fontsource`, with no external CDN.
-- **Themes**: dark by default, light restored from local preference; both share the CSS variables in `src/styles/global.css`, with no duplicated palette per component.
+- **Themes**: light by default (white background), dark restored from local preference; both share the CSS variables in `src/styles/global.css`, with no duplicated palette per component.
 - **Rhythm**: shared `section` / `section-compact` / `page-hero` spacing controls vertical rhythm, with tighter mobile overrides.
 - **Motion**: scroll progress and reveals serve content and respect `prefers-reduced-motion`.
 - **Chinese typography**: `:lang(zh)` forces upright text to avoid synthesized italics; digits and Latin labels still use mono or serif faces.
