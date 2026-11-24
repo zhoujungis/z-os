@@ -1,0 +1,10 @@
+{
+  "name": "Echo Space",
+  "description": "按静默、跳绳、跑步与爬山四种场景组织的沉浸式音频播放器。",
+  "category": "Audio & Focus",
+  "url": "https://echo-space-run.pages.dev/",
+  "sourceUrl": "https://github.com/zhoujungis/echo_space",
+  "projectSlug": "echo-space",
+  "serviceId": "echo-space",
+  "displayOrder": 50
+}

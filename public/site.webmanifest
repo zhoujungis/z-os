@@ -1,0 +1,10 @@
+{
+  "name": "ZHOUJUN.DEV — Z OS",
+  "short_name": "Z OS",
+  "description": "Independent software, built in public.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#15130F",
+  "theme_color": "#15130F",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

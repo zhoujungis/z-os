@@ -1,0 +1,549 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StatusBadge from '../components/common/StatusBadge.astro';
+import Icon from '../components/common/Icon.astro';
+import statusData from '../data/status.json';
+import type { Lang, StatusSnapshot } from '../types/domain';
+import { getServiceMetrics } from '../utils/status';
+import { getCopy } from '../i18n/ui';
+import { formatDate } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const status = statusData as unknown as StatusSnapshot;
+const formatFullDate = (value: string | null) =>
+  value
+    ? formatDate(value, lang, {
+        dateStyle: 'medium',
+        timeStyle: 'medium',
+      })
+    : copy.statusPage.notProbed;
+const formatShortDate = (value: string) =>
+  formatDate(value, lang, {
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+const historyWindow = 7;
+const services = status.services.map((service) => {
+  const metrics = getServiceMetrics(service);
+  const recent = service.history.slice(-historyWindow);
+  const missing = historyWindow - recent.length;
+  return {
+    ...service,
+    metrics,
+    domain: new URL(service.url).hostname.replace(/^www\./, ''),
+    recent,
+    slots: Array.from({ length: historyWindow }, (_, slot) =>
+      slot < missing ? null : recent[slot - missing],
+    ),
+  };
+});
+const operational = services.filter((service) => service.metrics.status === 'operational').length;
+const degraded = services.filter((service) => service.metrics.status === 'degraded').length;
+const outage = services.filter((service) => service.metrics.status === 'outage').length;
+const unknown = services.filter((service) => service.metrics.status === 'unknown').length;
+const lastProbe = services
+  .map((service) => service.metrics.checkedAt)
+  .filter((value): value is string => Boolean(value))
+  .sort()
+  .at(-1);
+---
+
+<BaseLayout lang={lang} title={copy.pageTitles.status} description={copy.seo.statusDescription}>
+  <header class="page-hero site-container">
+    <div>
+      <p class="eyebrow">{copy.statusPage.eyebrow}</p>
+      <h1>
+        {copy.statusPage.titleA} <em>{copy.statusPage.titleEm}</em>
+      </h1>
+    </div>
+    <p class="status-lede">{copy.statusPage.body}</p>
+  </header>
+
+  <section class="site-container status-index-wrap" aria-label={copy.statusPage.services}>
+    <div class="status-index" data-reveal>
+      <div>
+        <span class="mono">{copy.statusPage.services}</span>
+        <strong>{String(services.length).padStart(2, '0')}</strong>
+      </div>
+      <div>
+        <span class="mono">{copy.statusPage.operational}</span>
+        <strong class="count-ok">{String(operational).padStart(2, '0')}</strong>
+      </div>
+      <div>
+        <span class="mono">{copy.statusPage.degraded}</span>
+        <strong class="count-warn">{String(degraded).padStart(2, '0')}</strong>
+      </div>
+      <div>
+        <span class="mono">{copy.statusPage.outage}</span>
+        <strong class="count-bad">{String(outage).padStart(2, '0')}</strong>
+      </div>
+      <div>
+        <span class="mono">{copy.statusPage.unknown}</span>
+        <strong class="count-unknown">{String(unknown).padStart(2, '0')}</strong>
+      </div>
+      <div class="status-index-note">
+        <span class="mono">{copy.statusPage.lastProbe}</span>
+        <p>{lastProbe ? `${formatShortDate(lastProbe)} UTC` : copy.statusPage.notProbed}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="site-container section-compact">
+    <div class="status-notice" data-reveal>
+      <Icon name="clock" size={18} />
+      <p>
+        <strong>{copy.statusPage.noticeTitle}</strong> {copy.statusPage.noticeBody}
+      </p>
+    </div>
+    <div class="status-grid">
+      {services.map((service, index) => {
+        const availability =
+          service.metrics.availability === null
+            ? copy.statusPage.collecting
+            : `${service.metrics.availability.toFixed(2)}%`;
+        const samples = `${service.metrics.sampleCount} ${copy.statusPage.checksSuffix}`;
+        const checkLabel = lang === 'en' && service.metrics.sampleCount === 1 ? '1 check' : samples;
+        return (
+          <article
+            class:list={['card', 'status-card', `status-${service.metrics.status}`]}
+            data-reveal
+            style={`--reveal-delay:${Math.min(index, 4) * 50}ms`}
+          >
+            <div class="status-card-head">
+              <StatusBadge status={service.metrics.status} lang={lang} />
+            </div>
+            <div class="status-card-title">
+              <div>
+                <span class="mono status-id">{service.id.toUpperCase()}</span>
+                <h2>{service.name}</h2>
+              </div>
+            </div>
+            <a class="service-url" href={service.url} target="_blank" rel="noopener noreferrer">
+              <span>{service.domain}</span>
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+            <dl>
+              <div>
+                <dt>{copy.statusPage.checked}</dt>
+                <dd>{formatFullDate(service.metrics.checkedAt)}</dd>
+              </div>
+              <div>
+                <dt>{copy.statusPage.response}</dt>
+                <dd>
+                  {service.metrics.responseMs === null ? '—' : `${service.metrics.responseMs} ms`}
+                </dd>
+              </div>
+              <div>
+                <dt>{copy.statusPage.availability}</dt>
+                <dd>{availability}</dd>
+              </div>
+              <div>
+                <dt>{copy.statusPage.samples}</dt>
+                <dd>{checkLabel}</dd>
+              </div>
+            </dl>
+            <div class="history">
+              <div class="history-head mono">
+                <span>{copy.statusPage.recent}</span>
+                <span>
+                  {service.recent.length
+                    ? `${service.recent.length} / ${historyWindow} ${copy.statusPage.recordedSuffix}`
+                    : copy.statusPage.noData}
+                </span>
+              </div>
+              <div class="history-bar" role="img" aria-label={copy.statusPage.historyAria}>
+                {service.recent.length ? (
+                  service.slots.map((check) =>
+                    check ? (
+                      <span
+                        class={`history-slot tick-${check.status}`}
+                        title={`${formatShortDate(check.checkedAt)} UTC · ${check.status}`}
+                      ></span>
+                    ) : (
+                      <span class="history-slot is-missing" title={copy.statusPage.noData}></span>
+                    ),
+                  )
+                ) : (
+                  <span class="history-empty mono">{copy.statusPage.awaiting}</span>
+                )}
+              </div>
+              <div class="history-legend mono" aria-hidden="true">
+                <span>
+                  <i class="tick-missing"></i>
+                  {copy.statusPage.legendMissing}
+                </span>
+                <span>
+                  <i class="tick-operational"></i>
+                  {copy.statusPage.legendOperational}
+                </span>
+                <span>
+                  <i class="tick-degraded"></i>
+                  {copy.statusPage.legendDegraded}
+                </span>
+                <span>
+                  <i class="tick-outage"></i>
+                  {copy.statusPage.legendOutage}
+                </span>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+    {status.services.length === 0 && (
+      <div class="empty-state">
+        <h2>{copy.statusPage.emptyTitle}</h2>
+        <p>{copy.statusPage.emptyBody}</p>
+      </div>
+    )}
+  </section>
+
+  <section class="site-container section-compact">
+    <div class="status-method" data-reveal>
+      <div class="status-method-head">
+        <div>
+          <p class="eyebrow">{copy.statusPage.methodEyebrow}</p>
+          <h2>{copy.statusPage.methodTitle}</h2>
+        </div>
+        <p>{copy.statusPage.methodNote}</p>
+      </div>
+      <dl class="status-method-grid">
+        <div>
+          <dt class="mono">{copy.statusPage.methodWindowLabel}</dt>
+          <dd>{copy.statusPage.methodWindowBody}</dd>
+        </div>
+        <div>
+          <dt class="mono">{copy.statusPage.methodScheduleLabel}</dt>
+          <dd>{copy.statusPage.methodScheduleBody}</dd>
+        </div>
+        <div>
+          <dt class="mono">{copy.statusPage.methodStateLabel}</dt>
+          <dd>{copy.statusPage.methodStateBody}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .status-lede {
+    word-break: keep-all;
+  }
+  .status-index-wrap {
+    padding-top: 0.9rem;
+  }
+  .status-index {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 0.5fr)) minmax(0, 1.4fr);
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-border);
+  }
+  .status-index > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.8rem 0.95rem;
+    background: var(--z-surface);
+  }
+  .status-index span.mono {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.07em;
+  }
+  .status-index strong {
+    font-family: var(--font-body);
+    font-size: 1.55rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .count-ok {
+    color: var(--z-success);
+  }
+  .count-warn {
+    color: var(--z-warning);
+  }
+  .count-bad {
+    color: var(--z-danger);
+  }
+  .count-unknown {
+    color: var(--z-text-muted);
+  }
+  .status-index-note {
+    justify-content: center;
+  }
+  .status-index-note p {
+    margin: 0;
+    color: var(--z-text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+  }
+  .status-notice {
+    display: flex;
+    gap: 0.9rem;
+    align-items: start;
+    margin-bottom: 0.85rem;
+    padding: 0.8rem 0.95rem;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+    color: var(--z-text-muted);
+  }
+  .status-notice svg {
+    flex: none;
+    margin-top: 0.25rem;
+    color: var(--z-primary);
+  }
+  .status-notice p {
+    margin: 0;
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+  .status-notice strong {
+    color: var(--z-text-secondary);
+  }
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+  .status-card {
+    --status-tone: var(--z-text-muted);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.05rem;
+    overflow: hidden;
+  }
+  .status-card::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3.2rem;
+    height: 3px;
+    content: '';
+    background: var(--status-tone);
+  }
+  .status-card.status-operational {
+    --status-tone: var(--z-success);
+  }
+  .status-card.status-degraded {
+    --status-tone: var(--z-warning);
+  }
+  .status-card.status-outage {
+    --status-tone: var(--z-danger);
+  }
+  .status-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0.9rem;
+  }
+  .status-id {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+  .status-card-title h2 {
+    margin: 0.2rem 0 0;
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+  }
+  .service-url {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+    color: var(--z-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+  }
+  .service-url:hover {
+    color: var(--z-primary);
+  }
+  .status-card dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0.85rem 0 0;
+    border-top: 1px solid var(--z-border);
+  }
+  .status-card dl div {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--z-border);
+  }
+  .status-card dl div:nth-child(even) {
+    padding-left: 1rem;
+    border-left: 1px solid var(--z-border);
+  }
+  .status-card dt {
+    color: var(--z-text-muted);
+    font-size: 0.68rem;
+  }
+  .status-card dd {
+    margin: 0.28rem 0 0;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+  .history {
+    margin-top: auto;
+    padding-top: 0.7rem;
+  }
+  .history-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.45rem;
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+  .history-bar {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 2px;
+    height: 22px;
+  }
+  .history-slot {
+    min-width: 0;
+    border-radius: 1px;
+    background: var(--z-border);
+  }
+  .history-slot.is-missing {
+    background: color-mix(in srgb, var(--z-text-muted) 13%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--z-border-strong) 45%, transparent);
+  }
+  .tick-missing {
+    background: color-mix(in srgb, var(--z-text-muted) 13%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--z-border-strong) 45%, transparent);
+  }
+  .tick-operational {
+    background: var(--z-success);
+  }
+  .tick-degraded {
+    background: var(--z-warning);
+  }
+  .tick-outage {
+    background: var(--z-danger);
+  }
+  .history-empty {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--z-border-strong);
+    border-radius: var(--z-radius-sm);
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+  }
+  .history-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.7rem;
+    margin-top: 0.45rem;
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+  }
+  .history-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+  }
+  .history-legend i {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 1px;
+  }
+  .status-method {
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .status-method-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 1.2rem;
+    align-items: end;
+    padding: 0.95rem 1.1rem;
+    border-bottom: 1px solid var(--z-border);
+  }
+  .status-method-head h2 {
+    margin: 0.4rem 0 0;
+    font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+    font-weight: 600;
+  }
+  .status-method-head > p {
+    max-width: 520px;
+    margin: 0;
+    color: var(--z-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+  .status-method-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background: var(--z-border);
+  }
+  .status-method-grid > div {
+    padding: 0.85rem 1.1rem;
+    background: var(--z-surface);
+  }
+  .status-method-grid dt {
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.07em;
+  }
+  .status-method-grid dd {
+    margin: 0.3rem 0 0;
+    color: var(--z-text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+  @media (max-width: 900px) {
+    .status-index {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .status-index-note {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 700px) {
+    .status-grid {
+      grid-template-columns: 1fr;
+    }
+    .status-method-head {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .status-method-grid {
+      grid-template-columns: 1fr;
+    }
+    .status-index {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .status-index > div:first-child {
+      grid-column: 1 / -1;
+    }
+    .status-index > div {
+      padding: 0.8rem 0.85rem;
+    }
+  }
+</style>

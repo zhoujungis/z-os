@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "services": [
+    {
+      "id": "blog",
+      "name": "Blog",
+      "url": "https://blog.zhoujun.dev",
+      "status": "operational",
+      "checkedAt": "2026-11-18T10:00:29.699Z",
+      "responseMs": 1464,
+      "history": [
+        {
+          "checkedAt": "2026-11-18T10:00:29.699Z",
+          "status": "operational",
+          "responseMs": 1464
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "name": "Music",
+      "url": "https://music.zhoujun.dev/",
+      "status": "operational",
+      "checkedAt": "2026-11-18T10:00:29.699Z",
+      "responseMs": 2264,
+      "history": [
+        {
+          "checkedAt": "2026-11-18T10:00:29.699Z",
+          "status": "operational",
+          "responseMs": 2264
+        }
+      ]
+    },
+    {
+      "id": "routewise",
+      "name": "Routewise",
+      "url": "https://routewise-ai.pages.dev/",
+      "status": "operational",
+      "checkedAt": "2026-11-18T10:00:29.699Z",
+      "responseMs": 1840,
+      "history": [
+        {
+          "checkedAt": "2026-11-18T10:00:29.699Z",
+          "status": "operational",
+          "responseMs": 1840
+        }
+      ]
+    },
+    {
+      "id": "happy-games",
+      "name": "Happy Games",
+      "url": "https://happy-games.pages.dev/",
+      "status": "operational",
+      "checkedAt": "2026-11-18T10:00:29.699Z",
+      "responseMs": 2287,
+      "history": [
+        {
+          "checkedAt": "2026-11-18T10:00:29.699Z",
+          "status": "operational",
+          "responseMs": 2287
+        }
+      ]
+    },
+    {
+      "id": "block-world",
+      "name": "Block World 3D",
+      "url": "https://block-world-3d.pages.dev/",
+      "status": "operational",
+      "checkedAt": "2026-11-18T10:00:29.699Z",
+      "responseMs": 2696,
+      "history": [
+        {
+          "checkedAt": "2026-11-18T10:00:29.699Z",
+          "status": "operational",
+          "responseMs": 2696
+        }
+      ]
+    },
+    {
+      "id": "echo-space",
+      "name": "Echo Space",
+      "url": "https://echo-space-run.pages.dev/",
+      "status": "operational",
+      "checkedAt": "2026-11-18T10:00:29.699Z",
+      "responseMs": 2446,
+      "history": [
+        {
+          "checkedAt": "2026-11-18T10:00:29.699Z",
+          "status": "operational",
+          "responseMs": 2446
+        }
+      ]
+    }
+  ]
+}

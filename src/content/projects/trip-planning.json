@@ -1,0 +1,39 @@
+{
+  "name": "Routewise",
+  "series": "Cloud",
+  "category": "AI Travel Planner",
+  "status": "released",
+  "tagline": "AI trip planner that streams geo-validated itineraries.",
+  "description": "面向 Cloudflare Pages 的 AI 旅行规划工作台，同时提供 Web 与微信小程序。用户选择城市、天数、预算与节奏后，服务端分块调用模型，以 SSE 流式返回经过地理校验的逐日行程。",
+  "featured": true,
+  "displayOrder": 50,
+  "repository": "https://github.com/zhoujungis/trip-planning",
+  "technologies": [
+    "React 19",
+    "TypeScript",
+    "Vite",
+    "Cloudflare Pages Functions",
+    "Cloudflare D1",
+    "Leaflet",
+    "ModelFlare Responses API"
+  ],
+  "features": [
+    "2–16 天、最多 8 城的行程生成与逐日排期",
+    "长行程按每 4 天分块并行生成，SSE 推送实时进度",
+    "逐日地理校验与回头路检测，控制路线合理性",
+    "时间线、地图落点、海报图与 PDF 导出",
+    "三语界面与币种联动",
+    "登录、积分、邀请奖励与历史行程"
+  ],
+  "architecture": [
+    "Pages Functions 提供 /api/*，D1 保存用户、会话、行程与积分流水",
+    "分块提示词携带完整城市排期，结果按天排序合并",
+    "模型输出强制 JSON，失败时把拒绝原因拼入提示词重试",
+    "生成成功后按积分余额原子扣费并写入流水",
+    "口令 PBKDF2-SHA256 哈希，会话经 HttpOnly Cookie 传递"
+  ],
+  "cover": "/images/projects/trip-planning-cover.webp",
+  "accent": "#D9A441",
+  "websiteUrl": "https://routewise-ai.pages.dev/",
+  "keywords": ["travel planning", "sse", "llm", "cloudflare-pages", "wechat"]
+}

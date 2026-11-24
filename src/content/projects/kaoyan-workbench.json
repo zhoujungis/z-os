@@ -1,0 +1,29 @@
+{
+  "name": "Kaoyan Workbench",
+  "series": "Cloud",
+  "category": "Study Workspace",
+  "status": "active",
+  "tagline": "A Vite multi-page workbench for postgraduate exam prep.",
+  "description": "给考研人用的备考工作台，Vite 多页应用，数据存云端，换设备登录同一账号即可继续。包含今日、计划、专注、成绩、复盘、资料柜与个人设置七个模块，图表用手写 SVG，白噪音由 Web Audio 实时合成。",
+  "featured": false,
+  "displayOrder": 210,
+  "repository": "https://github.com/zhoujungis/kaoyan-workbench",
+  "technologies": ["Vite", "JavaScript", "Web Audio API", "SVG"],
+  "features": [
+    "今日：倒计时、日程与打卡",
+    "计划：周日程、任务看板与甘特图",
+    "专注：多时长番茄钟与实时白噪音",
+    "成绩：正确率曲线与模考趋势",
+    "复盘：签到日历、连续天数与备考时光轴",
+    "资料柜与目标院校、每日目标设置"
+  ],
+  "architecture": [
+    "Vite 多页构建，8 个 HTML 入口共享模块",
+    "图表全部手写 SVG，不依赖图表库",
+    "白噪音用 Web Audio API 实时合成",
+    "云端 11 张表按 owner_id 做行级权限隔离",
+    "窄屏切换底部 Tab 栏，输入字号固定 16px"
+  ],
+  "accent": "#D99A2B",
+  "keywords": ["exam-prep", "pomodoro", "study", "vite", "cloud-sync"]
+}

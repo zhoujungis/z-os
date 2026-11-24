@@ -1,0 +1,27 @@
+{
+  "name": "NanoAPI",
+  "series": "Nano",
+  "category": "Developer Tools",
+  "status": "released",
+  "tagline": "A lightweight desktop client for everyday API debugging.",
+  "description": "面向 Windows 的轻量级接口测试工具，保留请求构造、集合、环境变量、响应查看与 cURL 互转等日常调试能力。无需账号和云同步，集合与设置保存在本地 JSON 文件中。",
+  "featured": false,
+  "displayOrder": 120,
+  "repository": "https://github.com/zhoujungis/NanoAPI",
+  "technologies": ["Go", "Wails v2", "WebView2", "JavaScript ES Modules", "JSON"],
+  "features": [
+    "请求标签页支持独立状态与重启恢复",
+    "集合树、环境变量和全局变量统一管理",
+    "支持多种请求体、认证方式与文件上传",
+    "cURL 导入导出与响应体保存",
+    "展示响应头、图片预览和链路耗时"
+  ],
+  "architecture": [
+    "Wails 与系统 WebView2 构成桌面窗口",
+    "Go 后端处理网络请求和文件操作",
+    "原生 ES Modules 负责编辑与界面渲染",
+    "本地 JSON 采用临时文件与重命名原子写入"
+  ],
+  "accent": "#D97706",
+  "keywords": ["API client", "HTTP debugging", "cURL", "Wails", "Windows"]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Test Manage System",
+  "series": "Craft",
+  "category": "Test Management",
+  "status": "active",
+  "tagline": "Vue 3 + Django QA platform for the full test lifecycle.",
+  "description": "面向 QA 团队的内部测试管理平台，统一管理用例设计、测试计划、执行跟踪与缺陷管理，支持多项目协作与细粒度角色权限。用例库按产品线组织，支持批量分配、审批、附件与 Excel 导入。",
+  "featured": false,
+  "displayOrder": 250,
+  "repository": "https://github.com/zhoujungis/test_manage_system",
+  "technologies": [
+    "Django",
+    "Django REST Framework",
+    "PostgreSQL",
+    "Vue 3",
+    "Vite",
+    "Element Plus",
+    "Pinia"
+  ],
+  "features": [
+    "用例库按产品线组织，支持优先级与状态筛选",
+    "用例分配、批量状态更新与审批",
+    "测试计划与执行结果条目自动生成",
+    "缺陷 S0–S4 与状态流转",
+    "仪表盘统计项目、用例、计划与缺陷分布",
+    "管理员用户管理与细粒度权限"
+  ],
+  "architecture": [
+    "Django config + apps 结构，DRF 按模块划分 API",
+    "JWT 认证，Access 1 小时、Refresh 8 小时并轮换",
+    "Vue 3 + Element Plus + Pinia + Vue Router",
+    "核心实体包含模块树、用例、计划、执行与缺陷",
+    "Excel 导入由 Django 管理命令完成"
+  ],
+  "accent": "#2563EB",
+  "keywords": ["test-management", "django", "vue3", "qa", "defect-tracking"]
+}

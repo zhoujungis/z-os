@@ -1,0 +1,60 @@
+---
+import { getCopy } from '../../i18n/ui';
+import { localizePath, ogLocale, stripLangPrefix } from '../../i18n';
+import { site } from '../../config/site';
+import type { Lang } from '../../types/domain';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>;
+  image?: string;
+  imageAlt?: string;
+  ogType?: 'website' | 'article';
+}
+const {
+  lang,
+  title,
+  description,
+  noindex = false,
+  jsonLd,
+  image: imagePath,
+  imageAlt,
+  ogType = 'website',
+} = Astro.props;
+const copy = getCopy(lang);
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const basePath = stripLangPrefix(currentPath);
+const isHome = basePath === '/';
+const fullTitle = isHome ? `${site.name} — ${copy.site.tagline}` : `${title} — ${site.name}`;
+const canonical = new URL(localizePath(basePath, lang), site.url).href;
+const alternateZh = new URL(localizePath(basePath, 'zh'), site.url).href;
+const alternateEn = new URL(localizePath(basePath, 'en'), site.url).href;
+const image = new URL(imagePath ?? '/images/og-default.png', site.url).href;
+const imageLabel = imageAlt ?? fullTitle;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="zh-CN" href={alternateZh} />
+<link rel="alternate" hreflang="en" href={alternateEn} />
+<link rel="alternate" hreflang="x-default" href={alternateZh} />
+{noindex && <meta name="robots" content="noindex,follow" />}
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={ogLocale[lang]} />
+<meta property="og:locale:alternate" content={ogLocale[lang === 'zh' ? 'en' : 'zh']} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={image} />
+<meta property="og:image:alt" content={imageLabel} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+<meta name="twitter:image:alt" content={imageLabel} />
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

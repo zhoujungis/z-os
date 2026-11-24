@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  title: string;
+  description: string;
+  href?: string;
+  linkLabel?: string;
+}
+const { title, description, href, linkLabel } = Astro.props;
+---
+
+<div class="empty-state">
+  <h2>{title}</h2>
+  <p>{description}</p>
+  {href && (
+    <a class="button button-secondary" href={href}>
+      {linkLabel}
+      <Icon name="arrow-up-right" size={16} />
+    </a>
+  )}
+  <slot />
+</div>

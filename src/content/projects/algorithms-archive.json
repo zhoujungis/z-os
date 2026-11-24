@@ -1,0 +1,26 @@
+{
+  "name": "Algorithms Archive",
+  "series": "Craft",
+  "category": "Algorithms Library",
+  "status": "released",
+  "tagline": "49 focused LeetCode write-ups: problem, idea, answer.",
+  "description": "从博客 lc-* 系列文章中整理的算法题解集，每篇只保留题目、思路、答案三部分，去掉动画说明与面试话术。共 49 篇、覆盖 56 道题，按 15 个主题分类，Python 48 篇、Java 47 篇，代码与原文逐行核对。",
+  "featured": false,
+  "displayOrder": 270,
+  "repository": "https://github.com/zhoujungis/Data-Structures-and-Algorithms",
+  "technologies": ["Markdown", "Python", "Java"],
+  "features": [
+    "49 篇题解覆盖 56 道题",
+    "按设计题、链表、二叉树、图、动态规划等 15 个主题分类",
+    "每篇固定三段结构：题目、思路、答案",
+    "多解法题按解法分节并标注复杂度",
+    "每篇回链原始博客文章"
+  ],
+  "architecture": [
+    "题解以独立 Markdown 文件存放在 problems/",
+    "README 作为总目录与难度统计索引",
+    "内容从博客文章提取并去除延伸内容"
+  ],
+  "accent": "#5A6ACF",
+  "keywords": ["algorithms", "leetcode", "data-structures", "python", "java"]
+}

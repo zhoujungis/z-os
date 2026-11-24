@@ -1,0 +1,31 @@
+{
+  "name": "Stack Frame",
+  "series": "Cloud",
+  "category": "Personal Blog",
+  "status": "released",
+  "tagline": "The 尘世栈帧 blog: Vue 3 + Django, split and self-hosted.",
+  "description": "个人博客「尘世栈帧」的前后端源码：前端 Vue 3 SPA 部署在 GitHub Pages，后端 Django + DRF + SQLite 运行在 PythonAnywhere，两者通过 REST API 通信。包含 Markdown 写作、嵌套评论、全文搜索、照片墙、地图足迹、RSS 与 PWA。",
+  "featured": false,
+  "displayOrder": 300,
+  "repository": "https://github.com/zhoujungis/zhoujungis.github.io",
+  "technologies": ["Vue 3", "Vite", "Pinia", "Django", "Django REST Framework", "SQLite"],
+  "features": [
+    "Markdown 写作与 Vditor 在线编辑器",
+    "嵌套评论与蜜罐防 spam",
+    "后端全文搜索与结果高亮",
+    "照片墙、灯箱与 ECharts 地图足迹",
+    "RSS 订阅与新文章邮件通知",
+    "管理后台与 PWA 离线缓存"
+  ],
+  "architecture": [
+    "GitHub Pages 托管 Vue SPA，PythonAnywhere 运行 Django",
+    "后端按 App 拆分 models / views / signals",
+    "Pinia 管理认证与文章状态，路由带认证守卫",
+    "构建产物输出到根目录 assets/ 由 GitHub Pages 提供",
+    "双主题自动记忆，Service Worker 离线缓存"
+  ],
+  "cover": "/images/projects/blog-cover.webp",
+  "accent": "#4E7A5F",
+  "websiteUrl": "https://blog.zhoujun.dev/",
+  "keywords": ["blog", "vue3", "django", "pwa", "github-pages"]
+}

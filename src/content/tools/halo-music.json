@@ -1,0 +1,10 @@
+{
+  "name": "HALO Music",
+  "description": "多音源搜索、在线播放、同步歌词、收藏歌单与离线管理，支持网页和桌面端使用。",
+  "category": "Music",
+  "url": "https://music.zhoujun.dev/",
+  "sourceUrl": "https://github.com/zhoujungis/halo_music",
+  "projectSlug": "halo-music",
+  "serviceId": "music",
+  "displayOrder": 10
+}

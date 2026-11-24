@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+.qoder/
+test-results/
+playwright-report/
+coverage/
+.commandcode/
+.wrangler/
+.shots/
+.tmp/
+.DS_Store

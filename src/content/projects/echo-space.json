@@ -1,0 +1,37 @@
+{
+  "name": "Echo Space",
+  "series": "Halo",
+  "category": "Audio Player",
+  "status": "released",
+  "tagline": "A scene-based immersive audio player on Cloudflare.",
+  "description": "部署在 Cloudflare Pages 上的沉浸式音频播放器，按场景组织内容，提供静默冥想、跳绳、跑步和爬山四类播放列表。前端为原生 HTML/CSS/JavaScript，后端用 Pages Functions 与 D1 保存账号、会话、播放历史与云端歌单。",
+  "featured": false,
+  "displayOrder": 190,
+  "repository": "https://github.com/zhoujungis/echo_space",
+  "technologies": [
+    "Vanilla JavaScript",
+    "Cloudflare Pages",
+    "Pages Functions",
+    "Cloudflare D1",
+    "Media Session API"
+  ],
+  "features": [
+    "四类场景播放：静默、跳绳、跑步、爬山",
+    "单曲、顺序、随机与循环播放",
+    "静默场景呼吸引导与多档专注计时",
+    "选择总时长自动组歌，阶段语音播报",
+    "账号、云端歌单与播放历史",
+    "个人页展示累计次数、时长与场景分布"
+  ],
+  "architecture": [
+    "原生前端静态托管在 Cloudflare Pages",
+    "Functions 提供账号、历史、搜索与歌单接口",
+    "D1 保存账号、会话、历史与歌单",
+    "播放时长索引在部署前从本地音频预生成",
+    "JOOX 搜索经服务端代理，带登录校验与限流"
+  ],
+  "cover": "/images/projects/echo-space-cover.webp",
+  "accent": "#7C6BF0",
+  "websiteUrl": "https://echo-space-run.pages.dev/",
+  "keywords": ["audio-player", "cloudflare", "d1", "meditation", "scene-playlists"]
+}

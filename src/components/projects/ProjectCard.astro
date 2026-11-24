@@ -1,0 +1,316 @@
+---
+import type { ProjectView } from '../../utils/projects';
+import type { Lang } from '../../types/domain';
+import Icon from '../common/Icon.astro';
+import StatusBadge from '../common/StatusBadge.astro';
+import { getFamily } from '../../config/families';
+import { getCopy } from '../../i18n/ui';
+import { localizePath } from '../../i18n';
+interface Props {
+  project: ProjectView;
+  lang: Lang;
+  eager?: boolean;
+}
+const { project, lang, eager = false } = Astro.props;
+const p = project.data;
+const copy = getCopy(lang);
+const family = getFamily(p.series, lang);
+const initials = p.name
+  .replace(/^Nano/i, 'N')
+  .replace(/^z-/i, 'Z')
+  .replace(/[^a-z0-9]/gi, '')
+  .slice(0, 2)
+  .toUpperCase();
+---
+
+<article
+  class="card card-interactive project-card"
+  style={`--project-accent:${p.accent}`}
+  data-project-card
+  data-name={`${p.name} ${p.tagline} ${p.description} ${p.keywords.join(' ')}`.toLowerCase()}
+  data-category={p.category}
+  data-series={p.series}
+  data-status={p.status}
+  data-tech={p.technologies.join('|')}
+>
+  <div class:list={['project-visual', { 'is-art': !p.cover }]}>
+    {p.cover ? (
+      <img
+        src={p.cover}
+        alt={`${p.name} ${copy.common.previewSuffix}`}
+        width="1280"
+        height="800"
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : undefined}
+        decoding="async"
+      />
+    ) : (
+      <div class="project-art" aria-hidden="true">
+        <span class="art-code">{family.code}</span>
+        <span class="art-logo">
+          {p.logo ? <img src={p.logo} alt="" width="80" height="80" loading="lazy" /> : initials}
+        </span>
+        <span class="art-name">{p.name}</span>
+      </div>
+    )}
+    <div class="project-visual-meta">
+      <span class="visual-chip family-code">{family.label}</span>
+      <span class="visual-chip">
+        <StatusBadge status={p.status} lang={lang} />
+      </span>
+    </div>
+  </div>
+  <div class="project-body">
+    <div class="project-heading">
+      <h3>
+        <a href={localizePath(`/projects/${project.id}`, lang)}>
+          <span class="card-link-overlay"></span>
+          {p.name}
+        </a>
+      </h3>
+      <span class="project-arrow" aria-hidden="true">
+        <Icon name="arrow-up-right" size={16} />
+      </span>
+    </div>
+    <p class="project-tagline">{p.tagline}</p>
+    <div class="project-foot">
+      <div class="tag-list">
+        {p.technologies.slice(0, 3).map((tech) => (
+          <span class="tag">{tech}</span>
+        ))}
+      </div>
+      <span class="project-category mono">{p.category}</span>
+    </div>
+  </div>
+</article>
+<style>
+  .project-card {
+    display: flex;
+    min-height: 268px;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    background: var(--z-surface);
+    transition:
+      border-color 240ms ease,
+      background-color 240ms ease;
+  }
+  .project-card:hover {
+    border-color: var(--z-border-strong);
+    background: var(--z-surface);
+  }
+  .project-card:focus-within {
+    border-color: var(--z-primary);
+  }
+  .project-visual {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--z-border);
+    background: var(--z-surface-raised);
+  }
+  .project-visual::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: 2px;
+    content: '';
+    background: var(--project-accent);
+    pointer-events: none;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .project-card:hover .project-visual::before,
+  .project-card:focus-within .project-visual::before {
+    transform: scaleX(1);
+  }
+  .project-visual > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .project-visual-meta {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    left: 0.65rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .visual-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.24rem 0.48rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    background: rgba(12, 10, 8, 0.74);
+    color: rgba(255, 255, 255, 0.94);
+  }
+  .visual-chip.family-code {
+    font-size: 0.62rem;
+    letter-spacing: 0.09em;
+  }
+  .visual-chip :global(.status-badge) {
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 0.62rem;
+  }
+  .project-art {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--z-surface-raised);
+  }
+  .project-art::before {
+    position: absolute;
+    inset: 0.75rem;
+    border: 1px solid var(--z-border);
+    content: '';
+  }
+  .project-art::after {
+    position: absolute;
+    right: 1rem;
+    bottom: 2.1rem;
+    left: 1rem;
+    height: 10px;
+    content: '';
+    background: repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--z-text-muted) 45%, transparent) 0 1px,
+      transparent 1px 5px
+    );
+    opacity: 0.55;
+  }
+  .art-code {
+    position: absolute;
+    right: -0.1em;
+    bottom: -0.3em;
+    color: transparent;
+    font-size: 8.5rem;
+    font-weight: 700;
+    letter-spacing: -0.08em;
+    line-height: 1;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--project-accent) 42%, transparent);
+  }
+  .art-logo {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 4.4rem;
+    height: 4.4rem;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--project-accent) 45%, var(--z-border));
+    border-radius: 2px;
+    background: var(--z-surface-solid);
+    color: var(--project-accent-text);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .art-logo img {
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: contain;
+  }
+  .art-name {
+    position: absolute;
+    bottom: 0.8rem;
+    left: 1rem;
+    color: var(--z-text-muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 0.82rem 0.95rem 0.9rem;
+  }
+  .project-heading {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .project-heading h3 {
+    margin: 0;
+    font-size: 1.22rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .project-heading h3 a {
+    position: static;
+  }
+  .project-card:hover .project-heading h3 a,
+  .project-card:focus-within .project-heading h3 a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .card-link-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
+  }
+  .project-arrow {
+    display: grid;
+    width: 1.9rem;
+    height: 1.9rem;
+    flex: none;
+    place-items: center;
+    border: 1px solid var(--z-border);
+    border-radius: 2px;
+    color: var(--z-text-muted);
+    transition:
+      color 180ms ease,
+      border-color 180ms ease,
+      transform 220ms ease;
+  }
+  .project-card:hover .project-arrow,
+  .project-card:focus-within .project-arrow {
+    border-color: var(--z-primary);
+    color: var(--z-primary);
+    transform: translate(2px, -2px);
+  }
+  .project-tagline {
+    margin: 0.35rem 0 0;
+    color: var(--z-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .project-foot {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-top: auto;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--z-border);
+  }
+  .project-category {
+    flex: none;
+    color: var(--z-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 700px) {
+    .project-card {
+      min-height: 0;
+    }
+    .project-body {
+      padding: 0.85rem;
+    }
+    .project-heading h3 {
+      font-size: 1.18rem;
+    }
+  }
+</style>

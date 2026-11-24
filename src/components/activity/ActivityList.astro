@@ -1,0 +1,45 @@
+---
+import type { ActivityItem, Lang } from '../../types/domain';
+import { getCopy } from '../../i18n/ui';
+import { formatDate } from '../../i18n';
+import Icon from '../common/Icon.astro';
+interface Props {
+  items: ActivityItem[];
+  lang: Lang;
+}
+const { items, lang } = Astro.props;
+const copy = getCopy(lang);
+const labels = copy.activityType;
+const format = (value: string) =>
+  formatDate(value, lang, { year: 'numeric', month: 'short', day: '2-digit' });
+---
+
+<ol class="activity-list">
+  {items.map((item) => (
+    <li class={`activity-item activity-${item.type}`}>
+      <time class="activity-date" datetime={item.occurredAt}>
+        {format(item.occurredAt)}
+      </time>
+      <div>
+        <span class="activity-type">
+          {labels[item.type === 'repository_update' ? 'code' : item.type]}
+        </span>
+        <h3>
+          <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">
+            {item.title}
+          </a>
+        </h3>
+        {item.type !== 'repository_update' && item.summary && <p>{item.summary}</p>}
+      </div>
+      <a
+        class="icon-button"
+        href={item.sourceUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${copy.common.open} ${item.title}`}
+      >
+        <Icon name="arrow-up-right" size={16} />
+      </a>
+    </li>
+  ))}
+</ol>

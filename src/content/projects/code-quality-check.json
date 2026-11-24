@@ -1,0 +1,28 @@
+{
+  "name": "Code Quality Check",
+  "series": "Craft",
+  "category": "Agent Skill",
+  "status": "active",
+  "tagline": "Agent skill that lints code and adds AI review with a score.",
+  "description": "一个两级代码分析 Skill：先用扫描脚本识别语言、统计文件并运行可用的 lint 工具，再由 AI 深度审查安全、正确性与可维护性问题。最终按 5 个维度加权打分，输出带 file:line 定位和优先级排序的 Markdown 报告。",
+  "featured": false,
+  "displayOrder": 260,
+  "repository": "https://github.com/zhoujungis/code-quality-check",
+  "technologies": ["Python", "Agent Skill", "Static analysis", "Markdown"],
+  "features": [
+    "识别语言并运行可用的 lint 工具",
+    "AI 深度审查安全、正确性与可维护性",
+    "5 维加权评分与 A–F 等级",
+    "问题带 file:line 定位并按优先级排序",
+    "默认只读，不改动代码",
+    "硬编码密钥只报告位置与类型"
+  ],
+  "architecture": [
+    "SKILL.md 定义 Scan → 补工具 → AI 审查 → 报告流程",
+    "scripts/scan.py 负责扫描与 lint 调度",
+    "references/ 存放评分细则与报告模板",
+    "由触发短语唤起，可在 Agent 中复用"
+  ],
+  "accent": "#16A34A",
+  "keywords": ["code-quality", "agent-skill", "linting", "review", "static-analysis"]
+}

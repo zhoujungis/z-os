@@ -1,0 +1,43 @@
+{
+  "name": "z-bot",
+  "series": "Z",
+  "category": "Personal AI",
+  "status": "released",
+  "tagline": "A local-first personal AI assistant for Windows.",
+  "description": "运行在 Windows 上的本地优先私人 AI 助理，把对话、长期记忆、项目、待办和提醒组织为个人上下文。它可在授权范围内操作文件、网页和浏览器，高风险动作需要人工确认，不提供任意 Shell。",
+  "featured": false,
+  "displayOrder": 160,
+  "repository": "https://github.com/zhoujungis/z-bot",
+  "technologies": [
+    "Electron",
+    "React",
+    "TypeScript",
+    "Vite",
+    "SQLite",
+    "FTS5",
+    "Zustand",
+    "Tailwind CSS",
+    "Radix UI",
+    "Vercel AI SDK"
+  ],
+  "features": [
+    "支持多家模型 Provider 与本地 Ollama",
+    "五类长期记忆通过 SQLite FTS5 检索",
+    "待办、周期提醒和项目停滞提醒",
+    "文件、网页、浏览器与剪贴板工具受权限控制",
+    "Windows 原生 OCR 与可选视觉模型回退",
+    "Quick Ask、截图快捷键和系统托盘集成"
+  ],
+  "architecture": [
+    "React Renderer 通过类型化 preload 调用主进程",
+    "Electron 主进程独占数据库、密钥与系统能力",
+    "意图路由区分直接回答与多步 Agent Loop",
+    "模型适配层统一不同 Provider 的流式事件",
+    "权限管理器在工具执行前校验路径与操作范围",
+    "SQLite 与 FTS5 保存会话、记忆和个人事务"
+  ],
+  "logo": "/images/projects/z-bot.svg",
+  "cover": "/images/projects/z-bot-cover.webp",
+  "accent": "#B5482A",
+  "keywords": ["personal AI", "local-first", "memory", "reminders", "Electron", "Windows"]
+}

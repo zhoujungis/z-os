@@ -1,0 +1,54 @@
+---
+import { counterpartPath } from '../../i18n';
+import { getCopy } from '../../i18n/ui';
+import type { Lang } from '../../types/domain';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const target: Lang = lang === 'zh' ? 'en' : 'zh';
+const href = counterpartPath(Astro.url.pathname, lang);
+const label = target === 'en' ? copy.header.languageToEn : copy.header.languageToZh;
+const short = target === 'en' ? copy.header.languageShortEn : copy.header.languageShortZh;
+---
+
+<a
+  class="language-switch"
+  href={href}
+  data-language-switch
+  data-target-lang={target}
+  hreflang={target === 'en' ? 'en' : 'zh-CN'}
+  lang={target === 'en' ? 'en' : 'zh-CN'}
+  aria-label={label}
+  title={label}
+>
+  {short}
+</a>
+
+<style>
+  .language-switch {
+    display: inline-flex;
+    min-width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 0.5rem;
+    border: 1px solid var(--z-border);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.04em;
+    transition:
+      border-color 180ms ease,
+      color 180ms ease,
+      background 180ms ease;
+  }
+  .language-switch:hover {
+    border-color: var(--z-border-strong);
+    background: var(--z-surface-soft);
+    color: var(--z-text);
+  }
+</style>

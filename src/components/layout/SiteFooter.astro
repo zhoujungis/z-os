@@ -1,0 +1,208 @@
+---
+import { site } from '../../config/site';
+import { getCopy } from '../../i18n/ui';
+import { localizePath } from '../../i18n';
+import Icon from '../common/Icon.astro';
+import type { Lang } from '../../types/domain';
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="site-footer">
+  <div class="site-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a class="footer-logo" href={localizePath('/', lang)} aria-label={copy.header.home}>
+          <span class="footer-mark" aria-hidden="true">
+            Z
+          </span>
+          <span>Z OS</span>
+        </a>
+        <p>
+          {copy.site.tagline}
+          <br />
+          {copy.footer.stats}
+        </p>
+        <div class="footer-socials">
+          <a href={site.github} target="_blank" rel="noopener noreferrer">
+            <Icon name="github" size={16} /> GitHub
+          </a>
+          <a href={site.blog} target="_blank" rel="noopener noreferrer">
+            {copy.footer.blog} <Icon name="arrow-up-right" size={14} />
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h2>{copy.footer.explore}</h2>
+          <a href={localizePath('/projects', lang)}>{copy.footer.projects}</a>
+          <a href={localizePath('/lab', lang)}>{copy.footer.lab}</a>
+          <a href={localizePath('/tools', lang)}>{copy.footer.tools}</a>
+        </div>
+        <div>
+          <h2>{copy.footer.connect}</h2>
+          <a href={localizePath('/about', lang)}>{copy.footer.about}</a>
+          <a href={site.blog} target="_blank" rel="noopener noreferrer">
+            {copy.footer.blog}
+          </a>
+          <a href={site.github} target="_blank" rel="noopener noreferrer">
+            {copy.footer.github}
+          </a>
+        </div>
+        <div>
+          <h2>{copy.footer.system}</h2>
+          <a href={localizePath('/activity', lang)}>{copy.footer.activity}</a>
+          <a href={localizePath('/timeline', lang)}>{copy.footer.timeline}</a>
+          <a href={localizePath('/status', lang)}>{copy.footer.status}</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>
+        © {year} ZhouJun. {copy.footer.built}
+      </p>
+      <p class="footer-stack">{copy.footer.stack}</p>
+      <a href={site.github} target="_blank" rel="noopener noreferrer">
+        github.com/zhoujungis <Icon name="arrow-up-right" size={13} />
+      </a>
+    </div>
+  </div>
+</footer>
+<style>
+  .site-footer {
+    position: relative;
+    margin-top: 0.75rem;
+    overflow: hidden;
+    border-top: 1px solid var(--z-border);
+    background: var(--z-bg);
+  }
+  .footer-main {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2.5rem;
+    padding-block: 1.9rem 1.6rem;
+  }
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 1.4rem;
+    font-weight: 650;
+    letter-spacing: -0.04em;
+  }
+  .footer-mark {
+    display: grid;
+    width: 1.75rem;
+    height: 1.75rem;
+    place-items: center;
+    border-radius: 2px;
+    background: var(--z-primary);
+    color: #faf6ed;
+    font-size: 1.2rem;
+    font-weight: 650;
+    line-height: 1;
+  }
+  .footer-brand p {
+    max-width: 360px;
+    margin: 0.7rem 0 0;
+    color: var(--z-text-muted);
+    font-size: 0.86rem;
+    line-height: 1.6;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .footer-socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.34rem 0.7rem;
+    border: 1px solid var(--z-border);
+    border-radius: 2px;
+    color: var(--z-text-secondary);
+    font-size: 0.74rem;
+    transition:
+      border-color 180ms ease,
+      color 180ms ease,
+      background 180ms ease;
+  }
+  .footer-socials a:hover {
+    border-color: var(--z-border-strong);
+    background: var(--z-surface-soft);
+    color: var(--z-text);
+  }
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .footer-links div {
+    display: grid;
+    align-content: start;
+    gap: 0.45rem;
+  }
+  .footer-links h2 {
+    margin: 0 0 0.5rem;
+    color: var(--z-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .footer-links a {
+    width: fit-content;
+    color: var(--z-text-secondary);
+    font-size: 0.86rem;
+    transition: color 180ms ease;
+  }
+  .footer-links a:hover {
+    color: var(--z-primary);
+  }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .footer-bottom p {
+    margin: 0;
+  }
+  .footer-bottom a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 180ms ease;
+  }
+  .footer-bottom a:hover {
+    color: var(--z-primary);
+  }
+  @media (max-width: 860px) {
+    .footer-main {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding-block: 1.65rem 1.5rem;
+    }
+  }
+  @media (max-width: 700px) {
+    .footer-bottom {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .footer-stack {
+      display: none;
+    }
+  }
+</style>

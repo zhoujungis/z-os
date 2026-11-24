@@ -1,0 +1,29 @@
+{
+  "name": "AutoTest",
+  "series": "Craft",
+  "category": "Test Automation",
+  "status": "active",
+  "tagline": "pytest mobile test runner with a Vue console and SSE logs.",
+  "description": "基于 pytest 的移动端自动化测试框架，配套 Vue 3 + Vite Web 控制台。在 Testbed 中选择脚本后可远程批量执行，SSE 实时推送日志，报告写入本地目录并支持历史查看，整批结束后只发一封汇总邮件。",
+  "featured": false,
+  "displayOrder": 240,
+  "repository": "https://github.com/zhoujungis/AutoTest",
+  "technologies": ["pytest", "Appium", "Vue 3", "Vite", "Node.js / Express", "PostgreSQL"],
+  "features": [
+    "Testbed 选择脚本并远程批量执行",
+    "SSE 流式推送输出与单脚本结束事件",
+    "历史报告列表、详情与进行中自动刷新",
+    "设备、手机与测试配置统一存储",
+    "Pretest 环境检查并可安装缺失依赖",
+    "批次结束发送一封 HTML 汇总邮件"
+  ],
+  "architecture": [
+    "Vite 前端扫描脚本，Node 服务执行 pytest",
+    "Express 逐个启动 pytest 进程并推送 SSE",
+    "报告按批次写入目录，合并 pytest-json-report",
+    "Appium 驱动封装并带启动检测",
+    "同一时刻只允许一批执行，批量共用一个邮件会话"
+  ],
+  "accent": "#0891B2",
+  "keywords": ["pytest", "appium", "mobile-testing", "vue3", "sse"]
+}

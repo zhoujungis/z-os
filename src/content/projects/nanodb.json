@@ -1,0 +1,29 @@
+{
+  "name": "NanoDB",
+  "series": "Nano",
+  "category": "Database",
+  "status": "released",
+  "tagline": "An embedded document database with CLI and REST access.",
+  "description": "用 Go 编写的轻量级嵌入式文档数据库，以 JSON 文档和集合为数据模型，不依赖外部服务。既可嵌入 Go 程序，也可通过一次性 CLI、交互式 shell 与 REST 服务使用，适合中小规模本地数据场景。",
+  "featured": false,
+  "displayOrder": 100,
+  "repository": "https://github.com/zhoujungis/NanoDB",
+  "technologies": ["Go", "JSON", "Snapshot + WAL", "REST", "Go Standard Library"],
+  "features": [
+    "文档查询支持排序、分页与字段投影",
+    "二级索引覆盖等值、范围与数组查询",
+    "支持文本索引、地理索引与聚合管道",
+    "提供 SQL 只读查询与原子批量写入",
+    "显式事务带快照读和提交冲突检测",
+    "CLI、交互式 shell 与 REST 覆盖核心能力"
+  ],
+  "architecture": [
+    "Go 嵌入式核心统一管理集合与文档",
+    "快照与 WAL 提供持久化和崩溃恢复",
+    "查询计划器复用过滤、索引与排序实现",
+    "CLI、shell 和 REST 共用同一数据库核心",
+    "数据目录通过操作系统级锁限制单进程访问"
+  ],
+  "accent": "#0F766E",
+  "keywords": ["embedded database", "document database", "NoSQL", "CLI", "REST", "Go"]
+}

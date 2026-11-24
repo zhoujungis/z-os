@@ -1,0 +1,38 @@
+{
+  "name": "AI DevOps",
+  "series": "Z",
+  "category": "AI Engineering",
+  "status": "released",
+  "tagline": "AI platform linking requirements, code, tests, bugs and releases.",
+  "description": "理解「需求 → 代码 → 测试 → Bug → 发布 → 线上问题」完整研发链路的 AI 工作平台。它同步 GitHub 仓库与 Webhook 事件，把提交、模块、需求、用例、缺陷与发布关联起来，用 10 个信号计算可分解的风险分数，并内置 5 个 AI Agent 做影响分析与根因调查。",
+  "featured": false,
+  "displayOrder": 170,
+  "repository": "https://github.com/zhoujungis/ai_devops",
+  "technologies": [
+    "Python",
+    "Django",
+    "Django REST Framework",
+    "Celery",
+    "PostgreSQL + pgvector",
+    "Typer + Textual"
+  ],
+  "features": [
+    "GitHub 增量同步与 Webhook 实时摄取",
+    "explain 端点返回提交的完整关联链",
+    "10 信号风险引擎，分数可逐项分解",
+    "可插拔 AI Provider 与 5 个内置 Agent",
+    "证据校验：AI 引用必须对应真实数据",
+    "人工确认后由固定 Executor 执行并审计"
+  ],
+  "architecture": [
+    "Django 按领域拆为 10 个应用",
+    "同步与 AI 分析由 Celery 异步处理",
+    "风险权重按系统、组织、项目三级继承",
+    "多租户查询统一走作用域过滤",
+    "模型只能看到只读且按项目过滤的工具",
+    "docker compose 编排 web / worker / beat / db / redis"
+  ],
+  "accent": "#4F46E5",
+  "websiteUrl": "https://pypi.org/project/aidevops/",
+  "keywords": ["ai-devops", "risk-engine", "django", "celery", "llm-agents"]
+}

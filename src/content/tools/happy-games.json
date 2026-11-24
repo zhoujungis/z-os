@@ -1,0 +1,10 @@
+{
+  "name": "Happy Games",
+  "description": "24 款零依赖浏览器小游戏，棋类带人机 AI，飞行棋支持联机，打开即玩。",
+  "category": "Browser Games",
+  "url": "https://happy-games.pages.dev/",
+  "sourceUrl": "https://github.com/zhoujungis/happy_games",
+  "projectSlug": "happy-games",
+  "serviceId": "happy-games",
+  "displayOrder": 30
+}

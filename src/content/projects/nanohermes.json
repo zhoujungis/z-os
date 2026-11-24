@@ -1,0 +1,38 @@
+{
+  "name": "NanoHermes",
+  "series": "Nano",
+  "category": "AI Agent",
+  "status": "released",
+  "tagline": "A lightweight coding agent for terminal, desktop, and daemon workflows.",
+  "description": "用 Rust 编写的低内存编程智能体，连接兼容 OpenAI Chat Completions 的模型端点，并提供文件、搜索、Shell、补丁、Git 与 MCP 工具。项目同时包含终端 CLI、Tauri 桌面应用和可远程执行任务的 HTTP daemon。",
+  "featured": false,
+  "displayOrder": 90,
+  "repository": "https://github.com/zhoujungis/NanoHermes",
+  "technologies": [
+    "Rust",
+    "Tauri 2",
+    "React",
+    "TypeScript",
+    "Vite",
+    "OpenAI-compatible API",
+    "MCP"
+  ],
+  "features": [
+    "终端支持一次性命令与交互式 REPL",
+    "内置文件编辑、代码搜索、Shell 和 Git 工具",
+    "桌面端管理本地工作区与远程 daemon 任务",
+    "支持 MCP 工具、资源与提示词",
+    "支持子智能体、技能、长期记忆与会话恢复",
+    "文件沙箱、审批策略与 Linux Landlock 约束执行"
+  ],
+  "architecture": [
+    "agent crate 承载 CLI、工具循环、MCP 与 daemon",
+    "Tauri 桌面前端采用 React 与 TypeScript",
+    "本地任务在进程内运行，远程任务转发 daemon",
+    "阻塞式 HTTP 与有界工具输出控制资源占用",
+    "会话、设置与长期记忆保存在本地目录"
+  ],
+  "logo": "/images/projects/nanohermes.svg",
+  "accent": "#4A4DD6",
+  "keywords": ["coding agent", "terminal", "desktop", "daemon", "MCP", "Rust"]
+}

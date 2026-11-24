@@ -1,0 +1,375 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ActivityList from '../components/activity/ActivityList.astro';
+import EmptyState from '../components/common/EmptyState.astro';
+import Icon from '../components/common/Icon.astro';
+import { getActivity } from '../utils/activity';
+import { getGitHubSnapshot } from '../utils/projects';
+import { site } from '../config/site';
+import { getCopy } from '../i18n/ui';
+import { formatDate, localizePath } from '../i18n';
+import type { Lang } from '../types/domain';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const activity = await getActivity(lang);
+const releases = activity.filter((item) => item.type === 'release').length;
+const updates = activity.filter((item) => item.type === 'repository_update').length;
+const milestones = activity.filter((item) => item.type === 'milestone').length;
+const github = getGitHubSnapshot();
+
+const groups: { key: string; label: string; items: typeof activity }[] = [];
+for (const item of activity) {
+  const key = item.occurredAt.slice(0, 7);
+  let group = groups.find((entry) => entry.key === key);
+  if (!group) {
+    group = {
+      key,
+      label: formatDate(item.occurredAt, lang, {
+        month: 'long',
+        year: 'numeric',
+      }),
+      items: [],
+    };
+    groups.push(group);
+  }
+  group.items.push(item);
+}
+const syncLabel = github.lastSuccessfulAt
+  ? formatDate(github.lastSuccessfulAt, lang, {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    })
+  : null;
+const releaseShare = activity.length ? Math.round((releases / activity.length) * 100) : 0;
+---
+
+<BaseLayout lang={lang} title={copy.pageTitles.activity} description={copy.seo.activityDescription}>
+  <header class="page-hero site-container">
+    <div>
+      <p class="eyebrow">{copy.activityPage.eyebrow}</p>
+      <h1>
+        {copy.activityPage.titleLine1}
+        <br />
+        <em>{copy.activityPage.titleEm}</em>
+      </h1>
+    </div>
+    <p>{copy.activityPage.body}</p>
+  </header>
+
+  <section class="site-container section-compact activity-layout">
+    <aside class="activity-summary" aria-label={copy.activityPage.summaryAria}>
+      <div class="summary-head mono">
+        <span>{copy.activityPage.snapshot}</span>
+        <span>{syncLabel ? copy.activityPage.synced : copy.activityPage.pending}</span>
+      </div>
+      <dl>
+        <div>
+          <dt>{copy.activityPage.publicSignals}</dt>
+          <dd>{String(activity.length).padStart(2, '0')}</dd>
+        </div>
+        <div>
+          <dt>{copy.activityPage.releases}</dt>
+          <dd>{String(releases).padStart(2, '0')}</dd>
+        </div>
+        <div>
+          <dt>{copy.activityPage.updates}</dt>
+          <dd>{String(updates).padStart(2, '0')}</dd>
+        </div>
+        <div>
+          <dt>{copy.activityPage.milestones}</dt>
+          <dd>{String(milestones).padStart(2, '0')}</dd>
+        </div>
+      </dl>
+      <div class="summary-mix" aria-hidden="true">
+        <div class="mix-bar">
+          <span class="mix-release" style={`width:${releaseShare}%`}></span>
+        </div>
+        <div class="mix-legend mono">
+          <span>
+            <i class="dot-release"></i>
+            {copy.activityPage.releaseLegend} {releaseShare}%
+          </span>
+          <span>
+            <i class="dot-code"></i>
+            {copy.activityPage.codeLegend} {100 - releaseShare}%
+          </span>
+        </div>
+      </div>
+      {syncLabel && (
+        <time class="summary-time mono" datetime={github.lastSuccessfulAt ?? ''}>
+          {copy.activityPage.syncPrefix} · {syncLabel} UTC
+        </time>
+      )}
+      <p>{copy.activityPage.note}</p>
+      <div class="summary-links">
+        <a href={localizePath('/timeline', lang)}>
+          {copy.activityPage.timelineLink} <Icon name="arrow-right" size={14} />
+        </a>
+        <a href={site.github} target="_blank" rel="noopener noreferrer">
+          GitHub <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+    </aside>
+    <div class="activity-feed">
+      <div class="feed-heading mono">
+        <span>{copy.activityPage.feed}</span>
+        <span>{copy.activityPage.newest}</span>
+      </div>
+      {activity.length ? (
+        groups.map((group) => (
+          <section class="activity-group" aria-label={group.label}>
+            <div class="group-head">
+              <h2>{group.label}</h2>
+              <span class="mono">{String(group.items.length).padStart(2, '0')}</span>
+            </div>
+            <ActivityList items={group.items} lang={lang} />
+          </section>
+        ))
+      ) : (
+        <EmptyState
+          title={copy.activityPage.emptyTitle}
+          description={copy.activityPage.emptyDescription}
+          href={site.github}
+          linkLabel={copy.activityPage.emptyLink}
+        />
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .activity-layout {
+    display: grid;
+    grid-template-columns: 264px minmax(0, 1fr);
+    gap: clamp(1.6rem, 3vw, 2.6rem);
+    align-items: start;
+  }
+  .activity-summary {
+    position: sticky;
+    top: 5.25rem;
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .summary-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+  .activity-summary dl {
+    margin: 0;
+    padding: 0 0.9rem;
+  }
+  .activity-summary dl div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--z-border);
+  }
+  .activity-summary dt {
+    color: var(--z-text-muted);
+    font-size: 0.8rem;
+  }
+  .activity-summary dd {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+  }
+  .summary-mix {
+    padding: 0.7rem 0.9rem 0.15rem;
+  }
+  .mix-bar {
+    display: block;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 0;
+    background: color-mix(in srgb, var(--z-accent) 35%, var(--z-border));
+  }
+  .mix-release {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--z-success);
+  }
+  .mix-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.8rem;
+    margin-top: 0.5rem;
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+  }
+  .mix-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .mix-legend i {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 1px;
+  }
+  .dot-release {
+    background: var(--z-success);
+  }
+  .dot-code {
+    background: var(--z-accent);
+  }
+  .summary-time {
+    display: block;
+    padding: 0.6rem 0.9rem 0;
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+  .activity-summary > p {
+    margin: 0.4rem 0 0;
+    padding: 0 0.9rem 0.7rem;
+    color: var(--z-text-muted);
+    font-size: 0.77rem;
+    line-height: 1.65;
+  }
+  .summary-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    padding: 0.65rem 0.9rem;
+    border-top: 1px solid var(--z-border);
+  }
+  .summary-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--z-primary);
+    font-size: 0.7rem;
+  }
+  .activity-feed {
+    min-width: 0;
+  }
+  .feed-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+  }
+  .activity-group {
+    margin-top: 1.2rem;
+  }
+  .activity-group:first-of-type {
+    margin-top: 0.9rem;
+  }
+  .group-head {
+    position: sticky;
+    top: calc(4.6rem + 1px);
+    z-index: 2;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 -0.6rem 0.35rem;
+    padding: 0.55rem 0.6rem 0.4rem;
+    border-bottom: 1px solid var(--z-border);
+    background: var(--z-bg);
+  }
+  .group-head h2 {
+    margin: 0;
+    color: var(--z-text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .group-head span {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+  }
+  .activity-feed :global(.activity-item) {
+    padding-block: 0.8rem;
+  }
+  .activity-feed :global(.activity-item h3) {
+    font-size: 0.98rem;
+  }
+  .activity-feed :global(.activity-item p) {
+    max-width: 750px;
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+  .activity-feed :global(.activity-item:first-child) {
+    border-top: 1px solid var(--z-border);
+  }
+  @media (max-width: 900px) {
+    .activity-layout {
+      grid-template-columns: 1fr;
+      gap: 1.6rem;
+    }
+    .activity-summary {
+      position: static;
+    }
+    .activity-summary dl {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding: 0;
+    }
+    .activity-summary dl div {
+      align-items: start;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding: 0.65rem 0.8rem;
+      border-bottom: 0;
+    }
+    .activity-summary dl div + div {
+      border-left: 1px solid var(--z-border);
+    }
+    .summary-mix,
+    .summary-time {
+      display: none;
+    }
+    .activity-summary > p {
+      padding-top: 0.25rem;
+    }
+  }
+  @media (max-width: 560px) {
+    .activity-summary dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .activity-summary dl div:nth-child(3) {
+      border-left: 0;
+    }
+    .activity-summary dl div {
+      border-bottom: 1px solid var(--z-border);
+    }
+    .activity-summary > p {
+      display: none;
+    }
+    .summary-links {
+      border-top: 0;
+    }
+  }
+  @media (max-width: 520px) {
+    .group-head {
+      top: calc(4.1rem + 1px);
+    }
+  }
+</style>

@@ -1,0 +1,36 @@
+{
+  "name": "Happy Games",
+  "series": "Play",
+  "category": "Browser Game Hall",
+  "status": "released",
+  "tagline": "24 vanilla-JS browser games with zero build steps.",
+  "description": "纯原生 HTML / CSS / JavaScript 编写的浏览器游戏厅，四个板块共 24 款游戏，没有框架、没有打包器、零依赖。棋类有人机 AI，飞行棋用 D1 做实时联机，模拟人生与华夏大乱斗接入大模型流式生成叙事。",
+  "featured": true,
+  "displayOrder": 60,
+  "repository": "https://github.com/zhoujungis/happy_games",
+  "technologies": [
+    "Vanilla JavaScript",
+    "Cloudflare Pages Functions",
+    "Cloudflare D1",
+    "WebAssembly",
+    "OpenRouter"
+  ],
+  "features": [
+    "棋类、益智、娱乐、华夏历史四个板块共 24 款游戏",
+    "五子棋、象棋与 WebAssembly 版 GNU Go",
+    "飞行棋联机房间与 AI 补位",
+    "大模型流式生成人生叙事与历史战报",
+    "账号体系与管理台",
+    "25 个 Node 测试文件与 Playwright 冒烟测试"
+  ],
+  "architecture": [
+    "每款游戏自包含，逻辑写成不依赖 DOM 的纯函数",
+    "shared/landing.js 是首页与板块的唯一数据源",
+    "Pages Functions 分层访问 D1，房间状态序列化存储",
+    "全站零构建直接发布，静态资源分层缓存"
+  ],
+  "cover": "/images/projects/happy-games-cover.webp",
+  "accent": "#C0392B",
+  "websiteUrl": "https://happy-games.pages.dev/",
+  "keywords": ["browser-games", "vanilla-javascript", "webassembly", "d1", "multiplayer"]
+}

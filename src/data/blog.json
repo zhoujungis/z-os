@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "lastSuccessfulAt": "2026-11-13T04:19:02.334Z",
+  "posts": [
+    {
+      "title": "断电之后：redo、undo 与半页写怎么把数据库救回来",
+      "description": "适用读者：写过 WAL 或存储引擎、但说不清「恢复」每一步在做什么的人；被 kill -9 之后数据还在而困惑的人；正在调 synchronous 、 innodb_flush_log_at_trx_commit 、checkpoint 参数的人；想知道双写缓冲到底防的是什么的人 结论先行：恢复不是「把日志重放一遍」这",
+      "url": "https://blog.zhoujun.dev/article/crash-recovery-redo-undo/",
+      "publishedAt": "2026-11-13T03:23:33.000Z"
+    },
+    {
+      "title": "LSM-Tree 与 B+Tree：一次写入到底写了几遍盘",
+      "description": "适用读者：写过 KV 存储或正在选型的人；被「LSM 写得快、B+ 树读得快」这类一句话结论说服过、但没看过账本的人；在 SQLite、RocksDB、LevelDB、InnoDB 之间做技术决策，想知道代价到底落在哪一层的人 结论先行：B+ 树把随机写摊成「随机页写」，LSM 把随机写变成「顺序追加 + 后台重写」。",
+      "url": "https://blog.zhoujun.dev/article/lsm-vs-btree-amplification/",
+      "publishedAt": "2026-11-13T03:23:16.000Z"
+    },
+    {
+      "title": "构建 4 分钟，3 分半在压 94 张图",
+      "description": "构建 4 分钟，3 分半在压 94 张图 适用读者：本地构建越来越慢、或者 CI 每次都在重复做同一件事的人 技术栈：Node 脚本 + sharp， postbuild 钩子；思路与语言无关 阅读时间：约 12 分钟 | 难度：简单 | 收获：一次完整的构建耗时解剖、一个 95% 时间被浪费掉的现场、以及把 191",
+      "url": "https://blog.zhoujun.dev/article/build-time-image-cache/",
+      "publishedAt": "2026-11-11T03:38:40.000Z"
+    },
+    {
+      "title": "一次 fsync 摊薄 1000 行：SQLite 提交实测",
+      "description": "一次 fsync 摊薄 1000 行：SQLite 提交实测 适用读者：写过\"循环里 insert 几万行\"的脚本，跑完发现要等一两分钟的人 技术栈：Python 标准库 sqlite3 + 真实落盘；结论对 SQLite / PostgreSQL / MySQL 的 group commit 通用 阅读时间：约 15",
+      "url": "https://blog.zhoujun.dev/article/sqlite-group-commit/",
+      "publishedAt": "2026-11-11T03:37:22.000Z"
+    },
+    {
+      "title": "从 3 秒到毫秒首屏：英文站去 JS 化",
+      "description": "从 3 秒到毫秒首屏：英文站去 JS 化 适用读者：手上有一个 SPA 站点，知道它\"首屏慢\"但说不清慢在哪的人 技术栈：Vue 3 + Vite 构建的 SPA，GitHub Pages 托管；英文站单独走预渲染静态壳 阅读时间：约 18 分钟 | 难度：中等 | 收获：一份可复算的首屏字节账、一次把 220 KB",
+      "url": "https://blog.zhoujun.dev/article/english-site-without-js/",
+      "publishedAt": "2026-11-11T03:36:33.000Z"
+    },
+    {
+      "title": "Z Bot：本地优先的私人 AI 助理怎么搭",
+      "description": "适用读者：想把 AI 助理放到自己电脑上、又不想把聊天记录和文件路径交给云端的人；正在用 Electron 做桌面 Agent、被权限、路径和打包问题缠住的人；想看清楚一个本地优先产品在哪些地方必须妥协的人 结论先行：Z Bot 的核心不是「接一个大模型」，而是把模型关进一个由主进程管理的盒子里：数据库、密钥、工具执行",
+      "url": "https://blog.zhoujun.dev/article/z-bot-local-first-ai-assistant/",
+      "publishedAt": "2026-11-05T02:34:59.000Z"
+    },
+    {
+      "title": "NanoAPI：用 Go + Wails 造一个够用的 Postman",
+      "description": "适用读者：想用 Go 写桌面工具、又不愿意背 Electron 的工程师；需要一个轻量 HTTP 调试客户端的开发者；对 Wails v2、WebView2 与 net/http 细节感兴趣的人 结论先行：NanoAPI 的取舍是「复用系统 WebView2 + 自建最小 HTTP 引擎 + 单 JSON 存储」；真正",
+      "url": "https://blog.zhoujun.dev/article/nanoapi-wails-http-client/",
+      "publishedAt": "2026-11-05T02:34:25.000Z"
+    },
+    {
+      "title": "InterviewAtlas：3 万条面经的自动采集与 LLM 归纳",
+      "description": "适用读者：想用 GitHub Actions 做长期数据采集、又不想买服务器的人；正在设计「抓取、去重、渲染、LLM 归纳」流水线的人；好奇免费额度下怎样把一次分析拆成多天跑完的人 结论先行：InterviewAtlas 的难点不在写爬虫，而在三件事——把增量判断做在请求之前、把落盘做成幂等、把模型调用做成可预算可缓存",
+      "url": "https://blog.zhoujun.dev/article/interviewatlas-daily-crawl-llm-analysis/",
+      "publishedAt": "2026-11-05T02:33:57.000Z"
+    },
+    {
+      "title": "micromd：3 MB 的单文件 Markdown 阅读器",
+      "description": "适用读者：想在 Windows 上做「单文件桌面应用」的 Go 与前端开发者；正在评估 WebView2 壳方案、或打算手写 Markdown 解析器的人；关心体积、启动、保存语义与安全边界的工程师 结论先行：MicroMD 把约 3.17 MiB 的 exe、零依赖的 HTML 界面和一个手写 Markdown 解析",
+      "url": "https://blog.zhoujun.dev/article/micromd-3mb-markdown-reader/",
+      "publishedAt": "2026-11-05T02:33:13.000Z"
+    },
+    {
+      "title": "NanoSSH：13 MB 的 Windows SSH 客户端怎么做",
+      "description": "适用读者：想用 Go 加 WebView 做轻量桌面工具，或正在处理终端字节流、SSH 协议细节的开发者。 结论先行：这个项目的关键不在功能数量，而在几处容易错的边界：IPC 的序列化方式、终端字节流的反压、PTY 参数顺序、主机密钥信任模型和 Windows 平台细节。 阅读时间约 30 分钟 | 难度：进阶 | 收",
+      "url": "https://blog.zhoujun.dev/article/nanoss-windows-ssh-client/",
+      "publishedAt": "2026-11-05T02:32:27.000Z"
+    },
+    {
+      "title": "搜索：从倒排索引到 PostgreSQL、Elasticsearch 选型",
+      "description": "适用读者：正在用 LIKE '%关键词%' 做站内搜索、发现数据一多就慢得没法用的人；在 PostgreSQL 全文检索和 Elasticsearch 之间摇摆的人；已经上了搜索引擎，但搜索结果不相关、索引还经常不同步的人 结论先行：模糊匹配慢，不是索引没加对，而是 B+ 树按完整字符串排序，天生回答不了「中间包含什么",
+      "url": "https://blog.zhoujun.dev/article/search-inverted-index-to-engine/",
+      "publishedAt": "2026-11-04T04:20:53.000Z"
+    },
+    {
+      "title": "文件上传：分片、断点续传与直传对象存储",
+      "description": "适用读者：正在让应用服务器中转上传字节的开发者；被大文件超时、内存上涨、文件损坏折腾过的人；准备把上传切到 S3 兼容对象存储，但不确定签名、分片和校验怎么配合的人 结论先行：上传的正确姿势不是「把应用服务器调大、超时调长」，而是让字节从客户端直接进入对象存储。服务端只做三件事：签发一张有范围、有时效的票，记录会话状态",
+      "url": "https://blog.zhoujun.dev/article/file-upload-production-deep-dive/",
+      "publishedAt": "2026-11-04T04:20:34.000Z"
+    },
+    {
+      "title": "WebSocket 上生产：心跳、重连与水平扩展",
+      "description": "适用读者：本地用 ws://localhost 联调顺利、一上线就遇到断连和丢消息的工程师；准备把单机 WebSocket 服务扩到多实例的人 结论先行：WebSocket 的麻烦几乎都不在协议本身，而在 它要穿过一堆按「短请求」设计的中间设施 。代理有 60 秒空闲超时，负载均衡按连接分配，多实例之间没有共享广播通道",
+      "url": "https://blog.zhoujun.dev/article/websocket-production-deep-dive/",
+      "publishedAt": "2026-11-04T04:19:53.000Z"
+    },
+    {
+      "title": "负载均衡：轮询、最少连接与一致性哈希的代价",
+      "description": "适用读者：做过扩容、被「机器加了但吞吐没涨」坑过，或者正在为网关、服务网格挑选后端选择策略的工程师 结论先行：负载均衡算法的差别不在于「谁更公平」，而在于 它假设的「负载」是什么，以及它看不见什么 。轮询假设每台机器一样快，最少连接假设连接数能代表压力，一致性哈希假设你要的是「同一个 key 落同一台」。选错假设，扩容",
+      "url": "https://blog.zhoujun.dev/article/load-balancing-algorithms-in-practice/",
+      "publishedAt": "2026-11-04T04:19:27.000Z"
+    },
+    {
+      "title": "优雅停机：别在 SIGTERM 那一刻丢掉请求",
+      "description": "适用读者：发版时见过 502 尖刺、但说不清是谁返回的后端工程师；正在把服务搬上 Kubernetes、发现滚动更新总会丢几条消息的人；被\"定时任务跑了两遍\"坑过一次的运维 结论先行：优雅停机不是一个开关，而是一条有时间顺序的排水流程——先让调度系统把流量摘走，再停止接受新连接，再关掉空闲的长连接，再等在途请求结束，最",
+      "url": "https://blog.zhoujun.dev/article/graceful-shutdown-in-practice/",
+      "publishedAt": "2026-11-04T04:18:36.000Z"
+    },
+    {
+      "title": "指标与链路追踪：从 RED 到 OpenTelemetry",
+      "description": "适用读者：已经有一堆日志、但每次排障仍然靠猜的后端工程师；准备给服务接 Prometheus 与 OpenTelemetry，却不确定先做哪一步的负责人 结论先行：日志记录事件，指标记录趋势，追踪记录单次请求的路径。三者不是替代关系。指标告诉你「有多糟、多常见」，追踪告诉你「糟在哪一段」，日志告诉你「那一段里发生了什么",
+      "url": "https://blog.zhoujun.dev/article/metrics-and-distributed-tracing/",
+      "publishedAt": "2026-11-04T04:17:53.000Z"
+    },
+    {
+      "title": "数据库连接池：为什么 100 个连接比 20 个更慢",
+      "description": "适用读者：遇到数据库慢、第一反应是「把连接池调大」的后端工程师；正在算 gunicorn 该开几个 worker、pgbouncer 该配多少连接的人；被 too many connections 和 server has gone away 反复打扰的运维同学 结论先行：连接池不是越大越好，它是一个限流阀。数据库的吞",
+      "url": "https://blog.zhoujun.dev/article/database-connection-pool-deep-dive/",
+      "publishedAt": "2026-11-04T04:17:20.000Z"
+    },
+    {
+      "title": "分布式事务：本地消息表、Outbox、Saga 与 TCC 的边界",
+      "description": "适用读者：正在把单体拆成微服务、第一次遇到「两张表要一起改」的后端工程师；被 2PC、事务消息、Saga、TCC 这几个名词绕晕，想知道它们各自到底承诺什么的人 结论先行：没有一种方案能同时拿到 ACID 的全部四条。本地消息表与 Outbox 用「同库同事务写入 + 至少一次投递 + 消费端幂等」换最终一致；Saga",
+      "url": "https://blog.zhoujun.dev/article/distributed-transaction-outbox-saga-tcc/",
+      "publishedAt": "2026-11-04T04:16:50.000Z"
+    },
+    {
+      "title": "B+ 树删除：页合并、借位与根收缩",
+      "description": "适用读者：删掉一半数据后发现表文件没变小的人；想知道 B+ 树删除为什么比插入复杂的人；在 InnoDB 与 SQLite 之间做选型、需要理解两者空间回收差异的人 结论先行：B+ 树删除的第一动作永远是「在叶子页里移除一个键」，真正麻烦的是 移除之后页快空了怎么办 。标准做法只有两种：向兄弟页借几个键（redistr",
+      "url": "https://blog.zhoujun.dev/article/btree-delete-merge-redistribute/",
+      "publishedAt": "2026-11-04T02:49:20.000Z"
+    },
+    {
+      "title": "MySQL MVCC：版本链与 Read View 是怎么判可见性的",
+      "description": "适用读者：能背出「RC 读最新、RR 读快照」但说不清快照存在哪里的人；被长事务拖慢 purge、导致磁盘暴涨的人；想知道 SELECT ... FOR UPDATE 为什么看到的值和普通 SELECT 不一样的人 结论先行：InnoDB 的 MVCC 不是「给每行存多个副本」，而是 一行只有一份最新记录，旧值挂在 u",
+      "url": "https://blog.zhoujun.dev/article/mysql-mvcc-version-chain-read-view/",
+      "publishedAt": "2026-11-04T02:48:54.000Z"
+    }
+  ]
+}

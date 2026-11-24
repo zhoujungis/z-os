@@ -1,0 +1,29 @@
+---
+import Icon from './Icon.astro';
+import { getCopy } from '../../i18n/ui';
+import type { Lang } from '../../types/domain';
+interface Props {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  href?: string;
+  linkLabel?: string;
+  lang?: Lang;
+}
+const { eyebrow, title, description, href, linkLabel, lang = 'zh' } = Astro.props;
+const fallbackLabel = getCopy(lang).common.viewAll;
+---
+
+<div class="section-heading">
+  <div>
+    <p class="eyebrow">{eyebrow}</p>
+    <h2>{title}</h2>
+    {description && <p>{description}</p>}
+  </div>
+  {href && (
+    <a class="text-link" href={href}>
+      {linkLabel ?? fallbackLabel}
+      <Icon name="arrow-right" size={16} />
+    </a>
+  )}
+</div>

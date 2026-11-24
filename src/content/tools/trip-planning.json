@@ -1,0 +1,10 @@
+{
+  "name": "Routewise",
+  "description": "选择城市、天数、预算与节奏，生成带地图落点和预算的逐日行程，支持海报与 PDF 导出。",
+  "category": "AI Travel",
+  "url": "https://routewise-ai.pages.dev/",
+  "sourceUrl": "https://github.com/zhoujungis/trip-planning",
+  "projectSlug": "trip-planning",
+  "serviceId": "routewise",
+  "displayOrder": 20
+}

@@ -1,0 +1,42 @@
+{
+  "name": "z-desktop",
+  "series": "Z",
+  "category": "AI Workspace",
+  "status": "released",
+  "tagline": "An AI-native Windows workspace for real computer tasks.",
+  "description": "把大模型规划能力与本机执行能力连接的 Windows 桌面工作台。Agent 可按任务调用文件、Shell、进程、窗口、GUI、浏览器、截图与剪贴板工具，Rust 侧统一执行风险校验、路径沙箱和用户审批。",
+  "featured": true,
+  "displayOrder": 20,
+  "repository": "https://github.com/zhoujungis/z-desktop",
+  "technologies": [
+    "Tauri 2",
+    "Vue 3",
+    "TypeScript",
+    "Rust",
+    "Pinia",
+    "SQLite",
+    "FTS5",
+    "Windows UI Automation",
+    "CDP"
+  ],
+  "features": [
+    "多 Provider 模型接入与流式任务输出",
+    "Agent Loop 覆盖规划、执行、观察与验证",
+    "44 个本机工具覆盖文件、Shell、GUI 与浏览器",
+    "五级风险模型与高风险操作审批",
+    "任务时间线展示步骤、活动和执行结果",
+    "文件管理、项目上下文与 FTS5 长期记忆"
+  ],
+  "architecture": [
+    "Vue 前端承载 Agent 状态机与模型适配",
+    "Tauri IPC 连接前端任务流和 Rust 核心",
+    "Rust 注册表统一定义并执行本机工具",
+    "安全层在每次执行前完成权限判定",
+    "SQLite 与 FTS5 保存任务和长期记忆",
+    "事件流实时驱动活动面板与任务时间线"
+  ],
+  "logo": "/images/projects/z-desktop.png",
+  "cover": "/images/projects/z-desktop-cover.webp",
+  "accent": "#625BF6",
+  "keywords": ["AI workspace", "desktop agent", "computer use", "Tauri", "Rust", "Windows"]
+}

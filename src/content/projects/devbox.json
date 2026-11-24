@@ -1,0 +1,37 @@
+{
+  "name": "DevBox",
+  "series": "Craft",
+  "category": "Developer Toolbox",
+  "status": "active",
+  "tagline": "Local-first browser toolbox with 21 developer utilities.",
+  "description": "基于 Vue 3、TypeScript 和 Vite 的浏览器端开发者工具箱，当前 21 个工具，覆盖 JSON、编码、安全、网络、时间、文本和生成器。无需登录，核心计算在浏览器本地完成，外部请求会在页面标注数据流向。",
+  "featured": false,
+  "displayOrder": 220,
+  "repository": "https://github.com/zhoujungis/devtools",
+  "technologies": [
+    "Vue 3.5",
+    "TypeScript 5.7",
+    "Vite 6",
+    "Pinia 3",
+    "Tailwind CSS 3",
+    "CodeMirror 6"
+  ],
+  "features": [
+    "JSON、SQL、Markdown 与文本 Diff 工具",
+    "Base64、URL、Hash、HMAC 与 JWT",
+    "CIDR、DNS、IP、Ping 与网络诊断",
+    "时间戳、Cron、正则、UUID 与二维码",
+    "AI 代码风格检测支持粘贴、文件与仓库",
+    "明暗主题、搜索弹窗与 PWA 离线缓存"
+  ],
+  "architecture": [
+    "统一 ToolDefinition 注册表驱动路由与搜索",
+    "工具页面与编辑器语言包按路由懒加载",
+    "正则与 Markdown 预览做转义与长度防护",
+    "vite-ssg 预渲染页面并输出独立 SEO 信息",
+    "CSP 等安全响应头由静态 _headers 提供"
+  ],
+  "logo": "/images/projects/devtools.png",
+  "accent": "#7C3AED",
+  "keywords": ["developer-tools", "local-first", "pwa", "vue3", "privacy"]
+}

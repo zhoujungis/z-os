@@ -1,0 +1,43 @@
+{
+  "name": "HALO Music",
+  "series": "Halo",
+  "category": "Music",
+  "status": "released",
+  "tagline": "Multi-source music streaming across web, desktop, and Android.",
+  "description": "基于 Cloudflare Pages、Pages Functions 与 D1 的在线音乐应用，同时提供 Electron 桌面客户端和 Android WebView 客户端。多上游音源统一为 HALO Track 数据结构，支持搜索、播放、歌词、收藏、歌单与离线管理。",
+  "featured": true,
+  "displayOrder": 30,
+  "repository": "https://github.com/zhoujungis/halo_music",
+  "technologies": [
+    "JavaScript",
+    "Cloudflare Pages",
+    "Pages Functions",
+    "Cloudflare D1",
+    "Electron",
+    "IndexedDB",
+    "Android WebView",
+    "Web Crypto"
+  ],
+  "features": [
+    "多音源搜索结果去重并交错排序",
+    "播放器支持多种模式与 LRC 同步歌词",
+    "睡眠定时结束时支持音量渐弱",
+    "网页画中画与 Electron 透明悬浮歌词",
+    "下载歌曲和本地音频统一离线管理",
+    "账号同步收藏、自建歌单与听歌历史",
+    "支持公开歌单链接与 HALO JSON 导入"
+  ],
+  "architecture": [
+    "浏览器与 Electron 复用同一 Pages 前端",
+    "Pages Functions 处理鉴权、缓存与音频解析",
+    "音源适配层统一不同上游的歌曲字段",
+    "D1 保存账号、用户库和共享缓存",
+    "localStorage 与 IndexedDB 提供本地数据能力",
+    "Electron 通过最小 preload 隔离桌面能力"
+  ],
+  "logo": "/images/projects/halo-music.svg",
+  "cover": "/images/projects/halo-music-cover.webp",
+  "accent": "#3F6B57",
+  "websiteUrl": "https://music.zhoujun.dev/",
+  "keywords": ["music player", "multi-source", "lyrics", "Cloudflare", "Electron", "Android"]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "NanoBrowser",
+  "series": "Nano",
+  "category": "Browser & Automation",
+  "status": "released",
+  "tagline": "A lightweight desktop browser with headless CLI and MCP automation.",
+  "description": "基于 Tauri 2 与系统 WebView2 的 Windows 桌面浏览器，同时提供无头自动化程序 nanoagent。可见浏览器与 headless CLI、MCP 服务共用进程内 DevTools Protocol 桥接，无需开放远程调试端口。",
+  "featured": true,
+  "displayOrder": 10,
+  "repository": "https://github.com/zhoujungis/NanoBrowser",
+  "technologies": ["Rust", "Tauri 2", "WebView2", "wry", "HTML/CSS/JavaScript", "CDP", "MCP"],
+  "features": [
+    "桌面浏览器支持标签、书签、历史和下载",
+    "内嵌 DevTools 可停靠底部或右侧",
+    "headless CLI 支持导航、点击、填写与截图",
+    "MCP over stdio 可供 AI 工具调用",
+    "网络流量捕获在采集时执行敏感信息脱敏"
+  ],
+  "architecture": [
+    "桌面浏览器与 nanoagent 共享 Rust 库",
+    "进程内 CDP 桥接直接调用 WebView2 COM 接口",
+    "浏览器外壳、页面与 DevTools 使用子 WebView",
+    "按 WebView 类型配置独立能力权限",
+    "MCP 与一次性 CLI 共用自动化浏览器实现"
+  ],
+  "logo": "/images/projects/nanobrowser.svg",
+  "accent": "#1A73E8",
+  "keywords": ["desktop browser", "headless browser", "MCP", "CDP", "WebView2", "automation"]
+}

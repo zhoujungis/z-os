@@ -1,0 +1,472 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EmptyState from '../components/common/EmptyState.astro';
+import Icon from '../components/common/Icon.astro';
+import { getActivity } from '../utils/activity';
+import { getProjects } from '../utils/projects';
+import { getCopy } from '../i18n/ui';
+import { formatDate, localizePath } from '../i18n';
+import type { Lang } from '../types/domain';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const projects = await getProjects(lang);
+const projectById = new Map(projects.map((project) => [project.id, project]));
+const milestones = (await getActivity(lang)).filter(
+  (item) => item.type === 'release' || item.type === 'milestone',
+);
+const formatMonth = (value: string) => formatDate(value, lang, { month: 'short' });
+const years: { year: string; items: typeof milestones }[] = [];
+for (const item of milestones) {
+  const year = item.occurredAt.slice(0, 4);
+  let group = years.find((entry) => entry.year === year);
+  if (!group) {
+    group = { year, items: [] };
+    years.push(group);
+  }
+  group.items.push(item);
+}
+const manualCount = milestones.filter((item) => item.type === 'milestone').length;
+const latest = milestones[0];
+const latestProject = latest?.projectSlug ? projectById.get(latest.projectSlug) : undefined;
+---
+
+<BaseLayout lang={lang} title={copy.pageTitles.timeline} description={copy.seo.timelineDescription}>
+  <header class="page-hero site-container">
+    <div>
+      <p class="eyebrow">{copy.timeline.eyebrow}</p>
+      <h1>
+        {copy.timeline.titleLine1}
+        <br />
+        <em>{copy.timeline.titleEm}</em>
+      </h1>
+    </div>
+    <p>{copy.timeline.body}</p>
+  </header>
+
+  <section class="site-container timeline-index-wrap" aria-label={copy.timeline.nodes}>
+    <div class="timeline-index" data-reveal>
+      <div>
+        <span class="mono">{copy.timeline.nodes}</span>
+        <strong>{String(milestones.length).padStart(2, '0')}</strong>
+      </div>
+      <div>
+        <span class="mono">{copy.timeline.latest}</span>
+        <strong class="index-date">
+          {latest
+            ? formatDate(latest.occurredAt, lang, {
+                year: 'numeric',
+                month: 'short',
+                day: '2-digit',
+              })
+            : '—'}
+        </strong>
+      </div>
+      <div>
+        <span class="mono">{copy.timeline.manual}</span>
+        <strong>{String(manualCount).padStart(2, '0')}</strong>
+      </div>
+      <div class="index-source">
+        <span class="mono">{copy.timeline.source}</span>
+        <p>{copy.timeline.sourceValue}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="site-container section-compact">
+    {milestones.length ? (
+      <div class="timeline">
+        {years.map((group) => (
+          <section class="year-group" aria-label={`${copy.timeline.nodes} ${group.year}`}>
+            <div class="year-label">
+              <span class="mono">{group.year}</span>
+              <span class="year-rule"></span>
+              <span class="mono year-count">{String(group.items.length).padStart(2, '0')}</span>
+            </div>
+            <ol class="timeline-list">
+              {group.items.map((item) => {
+                const project = item.projectSlug ? projectById.get(item.projectSlug) : undefined;
+                return (
+                  <li class:list={['timeline-item', `timeline-${item.type}`]} data-reveal>
+                    <time class="timeline-date mono" datetime={item.occurredAt}>
+                      <span>{formatMonth(item.occurredAt)}</span>
+                      <strong>{item.occurredAt.slice(8, 10)}</strong>
+                    </time>
+                    <span class="timeline-dot" aria-hidden="true"></span>
+                    <div class="timeline-card">
+                      <div class="timeline-card-top">
+                        <span class="timeline-type mono">
+                          {item.type === 'release'
+                            ? copy.timeline.typeRelease
+                            : copy.timeline.typeMilestone}
+                        </span>
+                        {project && (
+                          <a
+                            class="timeline-project"
+                            href={localizePath(`/projects/${project.id}`, lang)}
+                            style={`--project-accent:${project.data.accent}`}
+                          >
+                            {project.data.name}
+                          </a>
+                        )}
+                      </div>
+                      <h2>{item.title}</h2>
+                      {item.summary && <p>{item.summary}</p>}
+                      <div class="timeline-actions">
+                        <a
+                          href={item.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${copy.timeline.openSource}: ${item.title}`}
+                        >
+                          {copy.timeline.openSource} <Icon name="arrow-up-right" size={14} />
+                        </a>
+                        {project && (
+                          <a href={localizePath(`/projects/${project.id}`, lang)}>
+                            {copy.timeline.projectDetails} <Icon name="arrow-right" size={14} />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        ))}
+      </div>
+    ) : (
+      <EmptyState
+        title={copy.timeline.emptyTitle}
+        description={copy.timeline.emptyDescription}
+        href={localizePath('/activity', lang)}
+        linkLabel={copy.timeline.emptyLink}
+      />
+    )}
+  </section>
+
+  <section class="site-container section-compact">
+    <div class="timeline-note" data-reveal>
+      <Icon name="clock" size={18} />
+      <p>
+        {copy.timeline.noteBefore}{' '}
+        <a href={localizePath('/activity', lang)}>{copy.timeline.activityLink}</a>
+        {copy.timeline.noteAfter}
+      </p>
+      {latestProject && (
+        <a class="text-link" href={localizePath(`/projects/${latestProject.id}`, lang)}>
+          {copy.timeline.latestRelease}
+          {latestProject.data.name}
+          <Icon name="arrow-right" size={15} />
+        </a>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline-index-wrap {
+    padding-top: 0.9rem;
+  }
+  .timeline-index {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 0.55fr)) minmax(0, 1.35fr);
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-border);
+  }
+  .timeline-index > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.8rem 0.95rem;
+    background: var(--z-surface);
+  }
+  .timeline-index span.mono {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+  .timeline-index strong {
+    font-family: var(--font-body);
+    font-size: 1.55rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .timeline-index .index-date {
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    font-style: normal;
+    letter-spacing: -0.01em;
+  }
+  .timeline-index .index-source {
+    justify-content: center;
+  }
+  .timeline-index p {
+    margin: 0;
+    color: var(--z-text-muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+  .timeline {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .year-group + .year-group {
+    margin-top: 2rem;
+  }
+  .year-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+  .year-label .mono {
+    color: var(--z-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+  .year-rule {
+    height: 1px;
+    flex: 1;
+    background: var(--z-border);
+  }
+  .year-count {
+    color: var(--z-primary) !important;
+  }
+  .timeline-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .timeline-item {
+    --date-width: 4rem;
+    --dot-width: 1.2rem;
+    --item-gap: 1rem;
+    --dot-size: 0.62rem;
+    --dot-offset: 1.2rem;
+    --line-left: calc(var(--date-width) + var(--item-gap) + var(--dot-width) / 2);
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--date-width) var(--dot-width) minmax(0, 1fr);
+    gap: var(--item-gap);
+    padding-bottom: 0.7rem;
+  }
+  .timeline-item:not(:last-child)::before {
+    position: absolute;
+    top: calc(var(--dot-offset) + var(--dot-size) / 2);
+    bottom: calc(-1 * (var(--dot-offset) + var(--dot-size) / 2));
+    left: var(--line-left);
+    width: 1px;
+    content: '';
+    background: var(--z-border);
+  }
+  .timeline-date {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    padding-top: 0.85rem;
+    color: var(--z-text-muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+  .timeline-date strong {
+    color: var(--z-text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .timeline-dot {
+    position: relative;
+    width: var(--dot-size);
+    height: var(--dot-size);
+    margin: var(--dot-offset) auto 0;
+    border-radius: 1px;
+    background: var(--z-primary);
+  }
+  .timeline-milestone .timeline-dot {
+    background: var(--z-accent);
+  }
+  .timeline-card {
+    padding: 0.85rem 0.95rem;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius-sm);
+    background: var(--z-surface);
+    transition:
+      border-color 220ms ease,
+      background 220ms ease;
+  }
+  .timeline-card:hover,
+  .timeline-card:focus-within {
+    border-color: var(--z-border-strong);
+    background: var(--z-surface-raised);
+  }
+  .timeline-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .timeline-type {
+    color: var(--z-success);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .timeline-milestone .timeline-type {
+    color: var(--z-accent);
+  }
+  .timeline-project {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--z-text-muted);
+    font-size: 0.72rem;
+  }
+  .timeline-project::before {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 1px;
+    content: '';
+    background: var(--project-accent);
+  }
+  .timeline-project:hover {
+    color: var(--z-primary);
+  }
+  .timeline-card h2 {
+    margin: 0.45rem 0 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .timeline-card p {
+    margin: 0.35rem 0 0;
+    color: var(--z-text-muted);
+    font-size: 0.87rem;
+    line-height: 1.65;
+  }
+  .timeline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-top: 0.7rem;
+  }
+  .timeline-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--z-primary);
+    font-size: 0.76rem;
+  }
+  .timeline-actions a + a {
+    color: var(--z-text-muted);
+  }
+  .timeline-actions a + a:hover {
+    color: var(--z-primary);
+  }
+  .timeline-note {
+    display: flex;
+    align-items: start;
+    gap: 0.9rem;
+    padding: 0.85rem 0.95rem;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    color: var(--z-text-muted);
+  }
+  .timeline-note svg {
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--z-primary);
+  }
+  .timeline-note p {
+    max-width: 680px;
+    margin: 0;
+    font-size: 0.83rem;
+    line-height: 1.65;
+  }
+  .timeline-note p a {
+    color: var(--z-primary);
+  }
+  .timeline-note > a {
+    margin-left: auto;
+  }
+  @media (max-width: 760px) {
+    .timeline-index {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .timeline-index .index-source {
+      display: none;
+    }
+    .timeline-index > div {
+      padding: 0.8rem 0.85rem;
+    }
+    .timeline-index .index-date {
+      font-size: 0.92rem;
+    }
+    .timeline-item {
+      --date-width: 3.4rem;
+      --dot-width: 1rem;
+      --item-gap: 0.8rem;
+    }
+    .timeline-note {
+      flex-wrap: wrap;
+    }
+    .timeline-note > a {
+      margin-left: 1.9rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .timeline-index {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .timeline-index > div {
+      gap: 0.25rem;
+      padding: 0.75rem 0.7rem;
+    }
+    .timeline-index span.mono {
+      font-size: 0.62rem;
+      line-height: 1.5;
+    }
+    .timeline-index strong {
+      font-size: 1.45rem;
+    }
+    .timeline-index .index-date {
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+    .timeline-item {
+      --dot-offset: 0.25rem;
+      --line-left: 0.5rem;
+      grid-template-columns: 1rem minmax(0, 1fr);
+      gap: 0.8rem;
+      padding-bottom: 0.85rem;
+    }
+    .timeline-date {
+      grid-column: 2;
+      flex-direction: row;
+      gap: 0.35rem;
+      padding-top: 0;
+    }
+    .timeline-date strong {
+      font-size: 0.86rem;
+    }
+    .timeline-dot {
+      grid-row: 1 / span 2;
+      margin-top: 0.25rem;
+    }
+    .timeline-card {
+      grid-column: 2;
+    }
+    .timeline-card-top {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+{
+  "name": "InterviewAtlas",
+  "series": "Craft",
+  "category": "Content Pipeline",
+  "status": "active",
+  "tagline": "47k+ Chinese tech interview reports, auto-collected and indexed.",
+  "description": "由 GitHub Actions 自动采集牛客网、面试鸭与掘金的面经，按公司与岗位拆分并渲染为可检索的面经地图。README 记录累计 47,322 条、158 家公司与 1,669 个公司-岗位文件，每条保留原文链接，并基于 GitHub Models 生成分析报告。",
+  "featured": false,
+  "displayOrder": 230,
+  "repository": "https://github.com/zhoujungis/InterviewAtlas",
+  "technologies": ["Python", "GitHub Actions", "GitHub Models", "Markdown", "YAML"],
+  "features": [
+    "自动采集三个平台的公开面经",
+    "按公司与岗位拆分 Markdown 并保留原文链接",
+    "按 16 类岗位归类并统计来源分布",
+    "每日增量与每周全量自动运行",
+    "GitHub Models 生成公司-岗位与岗位分析"
+  ],
+  "architecture": [
+    "Python 包按 sources、normalize、storage、render、analyze 分层",
+    "config.yaml 控制输出目录、保留天数与来源",
+    "data/interviews 按公司分片存 JSON",
+    "daily 与 weekly 两个 workflow 分别跑增量与全量",
+    "分析提示词带版本号，便于强制重新生成"
+  ],
+  "accent": "#10B981",
+  "keywords": ["interview", "data-collection", "github-actions", "llm", "markdown"]
+}

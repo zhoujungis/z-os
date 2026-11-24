@@ -1,0 +1,279 @@
+---
+import { getNavigation, site } from '../../config/site';
+import { getCopy } from '../../i18n/ui';
+import { localizePath, stripLangPrefix } from '../../i18n';
+import Icon from '../common/Icon.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
+import ThemeToggle from './ThemeToggle.vue';
+import MobileNavigation from './MobileNavigation.vue';
+import type { Lang } from '../../types/domain';
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const navigation = getNavigation(lang);
+const path = stripLangPrefix(Astro.url.pathname.replace(/\/+$/, '') || '/');
+const isActive = (href: string) => {
+  const target = stripLangPrefix(href);
+  return target === '/' ? path === '/' : path === target || path.startsWith(`${target}/`);
+};
+const mobileLabels = {
+  open: copy.header.mobileOpen,
+  dialog: copy.header.mobileDialog,
+  close: copy.header.mobileClose,
+  nav: copy.header.mobileNav,
+  menu: copy.header.mobileMenu,
+  note: copy.header.mobileNote,
+  stats: copy.header.mobileStats,
+};
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-container header-inner">
+    <a class="brand" href={localizePath('/', lang)} aria-label={copy.header.home}>
+      <span class="brand-mark" aria-hidden="true">
+        Z
+      </span>
+      <span class="brand-type">
+        <strong>Z OS</strong>
+        <small>ZHOUJUN.DEV</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label={copy.header.mainNav}>
+      {navigation.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <button
+        class="search-trigger"
+        type="button"
+        data-command-open
+        aria-label={copy.header.searchAria}
+        aria-haspopup="dialog"
+        aria-keyshortcuts="Meta+K Control+K"
+      >
+        <Icon name="search" size={16} />
+        <span>{copy.header.search}</span>
+        <kbd data-search-shortcut>⌘ K</kbd>
+      </button>
+      <span class="header-divider" aria-hidden="true"></span>
+      <LanguageSwitch lang={lang} />
+      <ThemeToggle
+        client:load
+        switchToLight={copy.header.switchToLight}
+        switchToDark={copy.header.switchToDark}
+      />
+      <a
+        class="icon-button github-link"
+        href={site.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={copy.header.githubAria}
+      >
+        <Icon name="github" size={18} />
+      </a>
+      <MobileNavigation
+        client:load
+        items={navigation}
+        currentPath={Astro.url.pathname.replace(/\/+$/, '') || '/'}
+        github={site.github}
+        labels={mobileLabels}
+      />
+    </div>
+  </div>
+</header>
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid transparent;
+    background: var(--z-header);
+    transition:
+      border-color 240ms ease,
+      background 240ms ease;
+  }
+  .site-header:hover,
+  .site-header.is-scrolled {
+    border-bottom-color: var(--z-border);
+  }
+  .site-header.is-scrolled {
+    background: var(--z-header);
+  }
+  .site-header::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 1px;
+    content: '';
+    background: var(--z-primary);
+    pointer-events: none;
+    transform: scaleX(var(--scroll-progress, 0));
+    transform-origin: left center;
+    transition: transform 100ms linear;
+  }
+  .header-inner {
+    display: flex;
+    height: 4rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.75rem;
+  }
+  .brand {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .brand-mark {
+    display: grid;
+    width: 1.85rem;
+    height: 1.85rem;
+    place-items: center;
+    border-radius: 2px;
+    background: var(--z-primary);
+    color: #faf6ed;
+    font-size: 1.3rem;
+    font-weight: 650;
+    line-height: 1;
+  }
+  .brand-type {
+    display: grid;
+    line-height: 1.1;
+  }
+  .brand-type strong {
+    font-size: 0.94rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .brand-type small {
+    margin-top: 0.3rem;
+    color: var(--z-text-muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .desktop-nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0;
+    color: var(--z-text-muted);
+    font-size: 0.82rem;
+    font-weight: 520;
+    line-height: 1.4;
+    transition: color 180ms ease;
+  }
+  .desktop-nav a:hover {
+    color: var(--z-text);
+  }
+  .desktop-nav a[aria-current='page'] {
+    color: var(--z-text);
+  }
+  .desktop-nav a[aria-current='page']::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.15rem;
+    left: 0;
+    height: 1px;
+    content: '';
+    background: var(--z-primary);
+  }
+  .header-actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.2rem;
+  }
+  .header-divider {
+    width: 1px;
+    height: 1.35rem;
+    margin-inline: 0.35rem;
+    background: var(--z-border);
+  }
+  .search-trigger {
+    display: flex;
+    height: 2.75rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.4rem 0 0.7rem;
+    border: 1px solid var(--z-border);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--z-text-muted);
+    cursor: pointer;
+    font-size: 0.76rem;
+    transition:
+      border-color 180ms ease,
+      color 180ms ease,
+      background 180ms ease;
+  }
+  .search-trigger:hover {
+    border-color: var(--z-border-strong);
+    background: var(--z-surface-soft);
+    color: var(--z-text);
+  }
+  kbd {
+    min-width: 2.2rem;
+    padding: 0.14rem 0.34rem;
+    border: 1px solid var(--z-border);
+    border-radius: 2px;
+    background: var(--z-surface);
+    font-size: 0.62rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+  :global(.mobile-trigger) {
+    display: none;
+  }
+  @media (max-width: 1120px) {
+    .desktop-nav {
+      gap: 0.9rem;
+    }
+    .search-trigger span,
+    .search-trigger kbd {
+      display: none;
+    }
+    .search-trigger {
+      width: 2.75rem;
+      justify-content: center;
+      padding: 0;
+      border-color: transparent;
+    }
+  }
+  @media (max-width: 960px) {
+    .desktop-nav {
+      display: none;
+    }
+    :global(.mobile-trigger) {
+      display: inline-flex;
+    }
+    .header-inner {
+      gap: 0.5rem;
+    }
+  }
+  @media (max-width: 520px) {
+    .github-link,
+    .header-divider {
+      display: none;
+    }
+    .brand-type small {
+      display: none;
+    }
+    .brand-type strong {
+      font-size: 0.86rem;
+    }
+    .header-inner {
+      height: 4rem;
+    }
+  }
+</style>

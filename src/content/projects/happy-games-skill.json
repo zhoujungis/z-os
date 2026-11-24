@@ -1,0 +1,29 @@
+{
+  "name": "Happy Games Skill",
+  "series": "Play",
+  "category": "Agent Skill",
+  "status": "active",
+  "tagline": "Agent skill that scaffolds and registers a new happy_games mini-game.",
+  "description": "happy_games 的「新增一款小游戏」技能包。Agent 会按既有约定——纯原生 HTML/CSS/JS、零构建、逻辑与渲染分层、运行时埋点、数据驱动首页——把游戏从脚手架做到登记与验收。内含最小游戏模板、单测模板与三份参考文档。",
+  "featured": false,
+  "displayOrder": 290,
+  "repository": "https://github.com/zhoujungis/happy-games-new-game",
+  "technologies": ["Node.js", "Vanilla HTML/CSS/JS", "node --test", "Playwright", "Agent Skill"],
+  "features": [
+    "一条命令生成游戏骨架、单测与 SVG 图标",
+    "规则写在纯函数 logic.js，可直接单测",
+    "复用公共主题、游戏与无障碍资产",
+    "接入统一生命周期埋点",
+    "指导完成五处登记",
+    "给出完整验收路径"
+  ],
+  "architecture": [
+    "SKILL.md 定义需求、脚手架、逻辑、接线、登记、验证流程",
+    "references/ 拆分约定、登记与测试文档",
+    "scripts/new-game.mjs 建目录并替换模板占位符",
+    "assets/game-template 是可运行的最小示例",
+    "脚手架只生成不自动改写站点配置"
+  ],
+  "accent": "#DB2777",
+  "keywords": ["agent-skill", "game-development", "scaffold", "vanilla-js"]
+}

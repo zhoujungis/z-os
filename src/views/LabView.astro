@@ -1,0 +1,436 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EmptyState from '../components/common/EmptyState.astro';
+import Icon from '../components/common/Icon.astro';
+import { site } from '../config/site';
+import { getCopy } from '../i18n/ui';
+import { localizePath } from '../i18n';
+import type { Lang } from '../types/domain';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const entries = (await getCollection('lab')).sort(
+  (a, b) => a.data.displayOrder - b.data.displayOrder,
+);
+---
+
+<BaseLayout lang={lang} title={copy.pageTitles.lab} description={copy.seo.labDescription}>
+  <header class="page-hero site-container">
+    <div>
+      <p class="eyebrow">{copy.lab.eyebrow}</p>
+      <h1>
+        {copy.lab.titleLine1}
+        <br />
+        <em>{copy.lab.titleEm}</em>
+      </h1>
+    </div>
+    <p>{copy.lab.body}</p>
+  </header>
+
+  <section class="site-container lab-index-wrap" aria-label={copy.lab.indexHead}>
+    <div class="lab-index" data-reveal>
+      <div class="lab-index-head mono">
+        <span>{copy.lab.indexHead}</span>
+        <span>{entries.length ? copy.lab.open : copy.lab.holding}</span>
+      </div>
+      <div class="lab-index-body">
+        <div class="lab-count">
+          <strong>{String(entries.length).padStart(2, '0')}</strong>
+          <span class="mono">{copy.lab.publicEntries}</span>
+        </div>
+        <ul class="lab-rules">
+          <li>{copy.lab.rule1}</li>
+          <li>{copy.lab.rule2}</li>
+          <li>{copy.lab.rule3}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="site-container section-compact">
+    {entries.length ? (
+      <div class="project-grid">
+        {entries.map((entry) => (
+          <article class="card lab-card" data-reveal>
+            {entry.data.cover && (
+              <div class="lab-cover">
+                <img
+                  src={entry.data.cover}
+                  alt={`${entry.data.title} ${copy.common.previewSuffix}`}
+                  width="1280"
+                  height="800"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div class="lab-body">
+              <span class="mono lab-type">{entry.data.type}</span>
+              <h2>{entry.data.title}</h2>
+              <p>{entry.data.description}</p>
+              <div class="tag-list">
+                {entry.data.technologies.map((tech) => (
+                  <span class="tag">{tech}</span>
+                ))}
+              </div>
+              <div class="lab-links">
+                {entry.data.demoUrl && (
+                  <a href={entry.data.demoUrl} target="_blank" rel="noopener noreferrer">
+                    {copy.lab.openDemo} <Icon name="arrow-up-right" size={15} />
+                  </a>
+                )}
+                {entry.data.sourceUrl && (
+                  <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer">
+                    {copy.lab.source} <Icon name="github" size={15} />
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="lab-empty" data-reveal>
+        <div class="lab-bench" aria-hidden="true">
+          <div class="bench-grid"></div>
+          <span class="bench-core">Z</span>
+          <span class="bench-label mono">{copy.lab.benchLabel}</span>
+        </div>
+        <EmptyState
+          title={copy.lab.emptyTitle}
+          description={copy.lab.emptyDescription}
+          href={localizePath('/projects', lang)}
+          linkLabel={copy.lab.emptyLink}
+        />
+      </div>
+    )}
+  </section>
+
+  <section class="site-container section-compact">
+    <div class="lab-process" data-reveal>
+      <div class="lab-process-head">
+        <p class="eyebrow">{copy.lab.processEyebrow}</p>
+        <h2>{copy.lab.processTitle}</h2>
+      </div>
+      <div class="lab-steps">
+        <article>
+          <span class="mono">01</span>
+          <h3>{copy.lab.process1Title}</h3>
+          <p>{copy.lab.process1Body}</p>
+        </article>
+        <article>
+          <span class="mono">02</span>
+          <h3>{copy.lab.process2Title}</h3>
+          <p>{copy.lab.process2Body}</p>
+        </article>
+        <article>
+          <span class="mono">03</span>
+          <h3>{copy.lab.process3Title}</h3>
+          <p>{copy.lab.process3Body}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="site-container section-compact">
+    <div class="lab-links-panel" data-reveal>
+      <div>
+        <p class="eyebrow">{copy.lab.panelEyebrow}</p>
+        <h2>{copy.lab.panelTitle}</h2>
+        <p>{copy.lab.panelBody}</p>
+      </div>
+      <div class="lab-panel-actions">
+        <a class="button button-primary" href={localizePath('/activity', lang)}>
+          {copy.lab.panelBuild} <Icon name="arrow-right" size={16} />
+        </a>
+        <a
+          class="button button-secondary"
+          href={site.github}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="github" size={16} /> {copy.lab.panelGithub}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lab-index-wrap {
+    padding-top: 1rem;
+  }
+  .lab-index {
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .lab-index-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1.1rem;
+    border-bottom: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+  }
+  .lab-index-body {
+    display: grid;
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
+    gap: 1.6rem;
+    align-items: center;
+    padding: 1.25rem 1.1rem;
+  }
+  .lab-count {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+  }
+  .lab-count strong {
+    font-size: clamp(2.4rem, 3.8vw, 3.1rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .lab-count span {
+    max-width: 7rem;
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
+  .lab-rules {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .lab-rules li {
+    color: var(--z-text-muted);
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+  .lab-empty {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+  .lab-empty :global(.empty-state) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+  .lab-bench {
+    position: relative;
+    display: grid;
+    min-height: 240px;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+    isolation: isolate;
+  }
+  .lab-bench::before {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 56px;
+    height: 3px;
+    content: '';
+    background: var(--z-primary);
+  }
+  .bench-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--z-border) 70%, transparent) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--z-border) 70%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 46px 46px;
+    opacity: 0.55;
+  }
+  .bench-core {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 64px;
+    height: 64px;
+    place-items: center;
+    border-radius: var(--z-radius-sm);
+    background: var(--z-primary);
+    color: var(--z-primary-ink);
+    font-size: 2.1rem;
+    font-weight: 650;
+    line-height: 1;
+  }
+  .bench-label {
+    position: absolute;
+    bottom: 0.85rem;
+    left: 1rem;
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+  .lab-process {
+    display: grid;
+    grid-template-columns: minmax(0, 0.5fr) minmax(0, 1.5fr);
+    gap: clamp(1.1rem, 2.6vw, 2.1rem);
+    align-items: start;
+    padding: clamp(1rem, 2vw, 1.35rem) 1.1rem;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .lab-process-head h2 {
+    margin: 0.4rem 0 0;
+    font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+    font-weight: 600;
+  }
+  .lab-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+  .lab-steps article {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--z-border);
+  }
+  .lab-steps span {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.06em;
+  }
+  .lab-steps h3 {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+  }
+  .lab-steps p {
+    margin: 0;
+    color: var(--z-text-muted);
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .lab-links-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+    padding: clamp(1rem, 2.1vw, 1.6rem);
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .lab-links-panel h2 {
+    margin: 0.5rem 0 0.4rem;
+    font-size: clamp(1.5rem, 2.7vw, 2rem);
+  }
+  .lab-links-panel p:not(.eyebrow) {
+    max-width: 520px;
+    margin: 0;
+    color: var(--z-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+  .lab-panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+  .lab-card {
+    overflow: hidden;
+    padding: 0;
+  }
+  .lab-cover {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--z-border);
+  }
+  .lab-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .lab-body {
+    padding: 1.15rem;
+  }
+  .lab-type {
+    color: var(--z-accent);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .lab-card h2 {
+    margin: 0.6rem 0 0.4rem;
+    font-size: 1.42rem;
+  }
+  .lab-card p {
+    margin: 0 0 0.8rem;
+    color: var(--z-text-muted);
+    font-size: 0.88rem;
+  }
+  .lab-links {
+    display: flex;
+    gap: 1.1rem;
+    margin-top: 1rem;
+  }
+  .lab-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--z-primary);
+    font-size: 0.78rem;
+  }
+  @media (max-width: 750px) {
+    .lab-index-body {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .lab-count span {
+      max-width: none;
+    }
+    .lab-empty {
+      grid-template-columns: 1fr;
+    }
+    .lab-process {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .lab-steps {
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    .lab-steps article {
+      padding-top: 0.85rem;
+      padding-left: 0;
+      border-top: 1px solid var(--z-border);
+      border-left: 0;
+    }
+    .lab-bench {
+      min-height: 200px;
+    }
+    .lab-links-panel {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+  }
+</style>

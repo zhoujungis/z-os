@@ -1,0 +1,29 @@
+{
+  "name": "Serial Log Agent",
+  "series": "Z",
+  "category": "AI Log Analysis",
+  "status": "active",
+  "tagline": "DeepSeek serial log analysis with rules, expert skills and LLM.",
+  "description": "基于 DeepSeek 的设备串口日志分析工具，采用规则扫描、Skills 专家判定与 LLM 上下文关联三层流水线，最后由 AI Agent 生成结构化 Bug 报告。分析结果可入库并支持人工判别，人工结论作为历史经验注入后续分析。",
+  "featured": false,
+  "displayOrder": 180,
+  "repository": "https://github.com/zhoujungis/cursor_serial_log_analyze",
+  "technologies": ["Python", "DeepSeek", "PyQt6", "Flask", "PostgreSQL", "pyserial"],
+  "features": [
+    "内置崩溃、内存、存储、电源温度与严重级别规则",
+    "规则命中后触发四个专家 Skill 输出结构化判定",
+    "LLM 时间线关联与风险 TOP3",
+    "人工判别结果回写并注入后续分析",
+    "从压测用例表自动提取匹配规则",
+    "桌面端、Web 端与串口实时监控三种入口"
+  ],
+  "architecture": [
+    "流水线分阶段推进：清洗、规则、Skills、LLM、合并与总结",
+    "规则编译与匹配独立于 Skills 调度",
+    "用户规则与 Skills 以 JSON 存放在 config/",
+    "PostgreSQL 可选，未配置时跳过入库",
+    "串口数据由 LSTM 在线检测异常后提交分析"
+  ],
+  "accent": "#7C3AED",
+  "keywords": ["deepseek", "serial-log", "llm", "anomaly-detection", "pyqt6"]
+}

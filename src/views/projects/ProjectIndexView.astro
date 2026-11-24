@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/projects/ProjectCard.astro';
+import ProjectFilters from '../../components/projects/ProjectFilters.vue';
+import EmptyState from '../../components/common/EmptyState.astro';
+import Icon from '../../components/common/Icon.astro';
+import { getProjects } from '../../utils/projects';
+import { getFamilies } from '../../config/families';
+import { site } from '../../config/site';
+import { getCopy } from '../../i18n/ui';
+import statusData from '../../data/status.json';
+import type { Lang, StatusSnapshot } from '../../types/domain';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const projects = await getProjects(lang);
+const categories = [...new Set(projects.map((p) => p.data.category))].sort();
+const statuses = [...new Set(projects.map((p) => p.data.status))].sort();
+const technologies = [...new Set(projects.flatMap((p) => p.data.technologies))].sort();
+const released = projects.filter((p) => p.data.status === 'released').length;
+const liveCount = (statusData as unknown as StatusSnapshot).services.length;
+const families = getFamilies(lang);
+const familyOptions = families.map((family) => ({
+  key: family.key,
+  label: family.label,
+  code: family.code,
+  color: family.color,
+  count: projects.filter((p) => p.data.series === family.key).length,
+}));
+const index = [
+  { label: copy.projects.indexApplications, value: String(projects.length).padStart(2, '0') },
+  { label: copy.projects.indexFamilies, value: String(families.length).padStart(2, '0') },
+  { label: copy.projects.indexReleased, value: String(released).padStart(2, '0') },
+  { label: copy.projects.indexLive, value: String(liveCount).padStart(2, '0') },
+];
+const statusLabels = copy.statusBadge;
+---
+
+<BaseLayout lang={lang} title={copy.pageTitles.projects} description={copy.seo.projectsDescription}>
+  <header class="page-hero site-container projects-hero">
+    <div data-reveal>
+      <p class="eyebrow">{copy.projects.eyebrow}</p>
+      <h1>
+        {copy.projects.titleLine1}
+        <br />
+        <em>{copy.projects.titleEm}</em>
+      </h1>
+      <p class="projects-lede">{copy.projects.lede}</p>
+      <div class="projects-actions">
+        <a class="button button-primary" href="#directory">
+          {copy.projects.browse}
+          <Icon name="arrow-right" size={16} />
+        </a>
+        <a
+          class="button button-secondary"
+          href={site.github}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="github" size={16} />
+          {copy.projects.github}
+        </a>
+      </div>
+    </div>
+    <div class="index-panel" data-reveal style="--reveal-delay:100ms">
+      <div class="index-head mono">
+        <span>{copy.projects.indexHead}</span>
+        <span>{copy.projects.indexPublic}</span>
+      </div>
+      <dl>
+        {index.map((item) => (
+          <div>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="index-foot mono">{copy.projects.indexFoot}</p>
+    </div>
+  </header>
+
+  <section id="directory" class="site-container section-compact directory">
+    <ProjectFilters
+      client:load
+      families={familyOptions}
+      categories={categories}
+      statuses={statuses}
+      statusLabels={statusLabels}
+      technologies={technologies}
+      total={projects.length}
+      labels={copy.filters}
+    />
+    <div id="project-grid" class="project-grid">
+      {projects.map((project, index) => (
+        <ProjectCard project={project} lang={lang} eager={index < 3} />
+      ))}
+    </div>
+    <div id="project-empty" hidden>
+      <EmptyState title={copy.projects.emptyTitle} description={copy.projects.emptyDescription}>
+        <button type="button" class="button button-secondary" data-project-reset>
+          {copy.filters.reset}
+        </button>
+      </EmptyState>
+    </div>
+    <div class="directory-foot">
+      <p>
+        {copy.projects.directoryCount1} <strong>{projects.length}</strong>{' '}
+        {copy.projects.directoryCount2} <strong>{families.length}</strong>{' '}
+        {copy.projects.directoryCount3}
+      </p>
+      <a href={site.github} target="_blank" rel="noopener noreferrer">
+        {copy.projects.allRepos} <Icon name="arrow-up-right" size={14} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .projects-lede {
+    max-width: 620px;
+    margin: 0.9rem 0 0;
+    color: var(--z-text-muted);
+    font-size: 0.94rem;
+    line-height: 1.65;
+  }
+  .projects-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.2rem;
+  }
+  .index-panel {
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .index-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .index-panel dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+  }
+  .index-panel dl div {
+    padding: 0.75rem 0.9rem;
+    border-right: 1px solid var(--z-border);
+    border-bottom: 1px solid var(--z-border);
+  }
+  .index-panel dl div:nth-child(even) {
+    border-right: 0;
+  }
+  .index-panel dl div:nth-child(n + 3) {
+    border-bottom: 0;
+  }
+  .index-panel dt {
+    color: var(--z-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .index-panel dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-body);
+    font-size: 1.7rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .index-foot {
+    margin: 0;
+    padding: 0.6rem 0.9rem;
+    border-top: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    line-height: 1.6;
+    letter-spacing: 0.03em;
+  }
+  .directory {
+    scroll-margin-top: 5.25rem;
+  }
+  .directory-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.76rem;
+  }
+  .directory-foot p {
+    margin: 0;
+  }
+  .directory-foot strong {
+    color: var(--z-text-secondary);
+    font-weight: 600;
+  }
+  .directory-foot a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--z-text-secondary);
+  }
+  .directory-foot a:hover {
+    color: var(--z-primary);
+  }
+  #project-empty {
+    margin-top: 0.85rem;
+  }
+  [hidden] {
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .index-panel {
+      margin-top: 0.5rem;
+    }
+    .directory-foot {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

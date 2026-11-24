@@ -1,0 +1,50 @@
+{
+  "name": "NanoQA",
+  "series": "Nano",
+  "category": "Quality Assurance",
+  "status": "active",
+  "tagline": "A collaborative platform for the complete software testing lifecycle.",
+  "description": "围绕需求、用例、计划、执行、缺陷与报告构建的测试协同平台，提供版本化用例、角色权限和审计日志。AI 功能目前仅由 MockProvider 留桩，生成内容进入人工审核队列，未接入真实模型。",
+  "featured": false,
+  "displayOrder": 130,
+  "repository": "https://github.com/zhoujungis/NanoQA",
+  "technologies": [
+    "Vue 3",
+    "TypeScript",
+    "Vite",
+    "Pinia",
+    "Element Plus",
+    "ECharts",
+    "Django",
+    "Django REST Framework",
+    "PostgreSQL",
+    "Redis"
+  ],
+  "features": [
+    "需求与用例关联并展示覆盖情况",
+    "用例模块树、步骤编辑和版本快照",
+    "测试计划、执行轮次与快捷键结果提交",
+    "缺陷状态机及用例、执行、需求多维关联",
+    "ECharts 报告与 CSV、XLSX 导入导出",
+    "AI 草案仅使用 MockProvider 并需人工审核"
+  ],
+  "architecture": [
+    "Vue 前端通过统一 API 客户端访问后端",
+    "Django 与 DRF 按业务域划分应用",
+    "JWT 认证结合角色权限矩阵控制访问",
+    "PostgreSQL 持久化业务数据与审计记录",
+    "Redis 可选用于缓存与限流",
+    "AITask 审核队列隔离 MockProvider 草案"
+  ],
+  "cover": "/images/projects/nanoqa-cover.webp",
+  "accent": "#4F46E5",
+  "keywords": [
+    "test management",
+    "QA",
+    "test cases",
+    "defect tracking",
+    "MockProvider",
+    "Django",
+    "Vue"
+  ]
+}

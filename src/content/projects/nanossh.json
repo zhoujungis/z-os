@@ -1,0 +1,38 @@
+{
+  "name": "NanoSSH",
+  "series": "Nano",
+  "category": "Network Tools",
+  "status": "active",
+  "tagline": "A focused, lightweight SSH client for Windows.",
+  "description": "刻意收窄功能面的 Windows SSH 客户端，聚焦服务器、终端、SFTP、本地端口转发和 SSH Key 管理。配置与密钥保存在本机，密码和私钥口令交由 Windows 凭据管理器保护，不依赖云账号。",
+  "featured": false,
+  "displayOrder": 110,
+  "repository": "https://github.com/zhoujungis/NanoSSH",
+  "technologies": [
+    "Go",
+    "Wails v2",
+    "TypeScript",
+    "xterm.js",
+    "WebGL",
+    "WebSocket",
+    "SFTP",
+    "Windows Credential Manager"
+  ],
+  "features": [
+    "xterm.js 终端支持 WebGL 渲染与全屏程序",
+    "SFTP 支持浏览、上传下载和文件管理",
+    "本地端口转发随会话统一清理",
+    "支持密码、私钥与 Windows ssh-agent 认证",
+    "可生成和导入 ed25519 密钥",
+    "known_hosts 采用 TOFU 并硬阻断指纹变化"
+  ],
+  "architecture": [
+    "sshcore 内核不依赖任何界面代码",
+    "Wails 外壳复用同一 SSH 连接开通子通道",
+    "二进制 WebSocket IPC 配合 ack 反压传输终端字节",
+    "Worker 解码后将字节交给 xterm.js 渲染",
+    "本地 JSON 与 Windows 凭据管理器分离配置和秘密"
+  ],
+  "accent": "#0E7490",
+  "keywords": ["SSH", "SFTP", "terminal", "port forwarding", "Windows", "Wails"]
+}

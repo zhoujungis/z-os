@@ -1,0 +1,858 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/common/Icon.astro';
+import StatusBadge from '../../components/common/StatusBadge.astro';
+import ProjectCard from '../../components/projects/ProjectCard.astro';
+import SectionHeading from '../../components/common/SectionHeading.astro';
+import { getGitHubSnapshot, getProjects, getRepository } from '../../utils/projects';
+import { getFamily } from '../../config/families';
+import { getCopy } from '../../i18n/ui';
+import { formatDate, localizePath } from '../../i18n';
+import { site } from '../../config/site';
+import type { Lang } from '../../types/domain';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+}
+const { lang, slug } = Astro.props;
+const copy = getCopy(lang);
+const all = await getProjects(lang);
+const project = all.find((item) => item.id === slug);
+if (!project) throw new Error(`Unknown project: ${slug}`);
+const p = project.data;
+const family = getFamily(p.series, lang);
+const repository = getRepository(p.repository);
+const release = repository?.latestRelease;
+const pool = all.filter((item) => item.id !== project.id);
+const sameFamily = pool.filter((item) => item.data.series === p.series);
+const filler = pool.filter((item) => item.data.featured && item.data.series !== p.series);
+const related = [...sameFamily, ...filler].slice(0, 3);
+const snapshot = getGitHubSnapshot();
+
+const initials = p.name
+  .replace(/^Nano/i, 'N')
+  .replace(/^z-/i, 'Z')
+  .replace(/[^a-z0-9]/gi, '')
+  .slice(0, 2)
+  .toUpperCase();
+const format = (value?: string | null) =>
+  value ? formatDate(value, lang, { dateStyle: 'medium' }) : null;
+const snapshotDate = snapshot.lastSuccessfulAt
+  ? formatDate(snapshot.lastSuccessfulAt, lang, { dateStyle: 'medium' })
+  : null;
+
+const actions = [
+  p.websiteUrl
+    ? {
+        href: p.websiteUrl,
+        label: copy.projectDetail.openProduct,
+        icon: 'external' as const,
+        primary: true,
+      }
+    : {
+        href: p.repository,
+        label: copy.projectDetail.viewSource,
+        icon: 'github' as const,
+        primary: true,
+      },
+  ...(p.websiteUrl
+    ? [
+        {
+          href: p.repository,
+          label: copy.projectDetail.viewSource,
+          icon: 'github' as const,
+          primary: false,
+        },
+      ]
+    : []),
+  ...(release
+    ? [
+        {
+          href: release.url,
+          label: `${copy.projectDetail.releasePrefix} ${release.tag}`,
+          icon: 'arrow-up-right' as const,
+          primary: false,
+        },
+      ]
+    : []),
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: p.name,
+      description: p.tagline,
+      applicationCategory: p.category,
+      codeRepository: p.repository,
+      ...(release ? { softwareVersion: release.tag, datePublished: release.publishedAt } : {}),
+      author: { '@type': 'Person', name: 'ZhouJun', url: 'https://github.com/zhoujungis' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: copy.projectDetail.breadcrumbProjects,
+          item: new URL(localizePath('/projects', lang), site.url).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: p.name,
+          item: new URL(localizePath(`/projects/${project.id}`, lang), site.url).href,
+        },
+      ],
+    },
+  ],
+};
+const ogImage = p.cover && !p.cover.endsWith('.svg') ? p.cover : undefined;
+---
+
+<BaseLayout
+  lang={lang}
+  title={p.name}
+  description={p.description}
+  jsonLd={jsonLd}
+  image={ogImage}
+  imageAlt={`${p.name} — ${p.tagline}`}
+  ogType="article"
+>
+  <article style={`--project-accent:${p.accent}`}>
+    <header class="detail-hero">
+      <div class="site-container">
+        <nav class="breadcrumb mono" aria-label={copy.projectDetail.breadcrumbAria}>
+          <a href={localizePath('/projects', lang)}>{copy.projectDetail.breadcrumbProjects}</a>
+          <span>/</span>
+          <span>{family.label.toUpperCase()}</span>
+          <span>/</span>
+          <span>{p.name.toUpperCase()}</span>
+        </nav>
+        <div class="detail-main">
+          <div class="detail-copy" data-reveal>
+            <div class="detail-label">
+              <span class="family-code">
+                {family.code} {family.label}
+              </span>
+              <span class="label-divider" aria-hidden="true"></span>
+              <StatusBadge status={p.status} lang={lang} />
+              <span class="detail-category mono">{p.category}</span>
+            </div>
+            <h1>{p.name}</h1>
+            <p class="detail-tagline">{p.tagline}</p>
+            <div class="detail-actions">
+              {actions.map((action) => (
+                <a
+                  class:list={['button', action.primary ? 'button-primary' : 'button-secondary']}
+                  href={action.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon name={action.icon} size={16} />
+                  {action.label}
+                </a>
+              ))}
+            </div>
+          </div>
+          <figure class="detail-visual" data-reveal style="--reveal-delay:100ms">
+            {p.cover ? (
+              <img
+                src={p.cover}
+                alt={`${p.name} ${copy.common.interfacePreviewSuffix}`}
+                width="1280"
+                height="800"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+              />
+            ) : (
+              <div class="detail-art" aria-hidden="true">
+                <span class="art-grid"></span>
+                <span class="art-logo">
+                  {p.logo ? <img src={p.logo} alt="" width="96" height="96" /> : initials}
+                </span>
+                <span class="art-code">{family.code}</span>
+              </div>
+            )}
+            <figcaption class="visual-caption">
+              <span class="mono">
+                {family.label} / {p.category}
+              </span>
+              <span class="mono">
+                {copy.projectDetail.visualSnapshot}{' '}
+                {snapshotDate?.toUpperCase() ?? copy.projectDetail.visualPending}
+              </span>
+            </figcaption>
+          </figure>
+        </div>
+        <dl class="detail-meta" data-reveal>
+          <div>
+            <dt>{copy.projectDetail.metaLatest}</dt>
+            <dd>{release?.tag ?? copy.projectDetail.metaNoRelease}</dd>
+          </div>
+          <div>
+            <dt>{copy.projectDetail.metaStack}</dt>
+            <dd>{repository?.language ?? p.technologies[0] ?? '—'}</dd>
+          </div>
+          <div>
+            <dt>{copy.projectDetail.metaPush}</dt>
+            <dd>{format(repository?.pushedAt) ?? copy.projectDetail.metaPending}</dd>
+          </div>
+          <div>
+            <dt>{copy.projectDetail.metaStars}</dt>
+            <dd>{repository?.stars ?? copy.projectDetail.metaUnavailable}</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <div class="site-container detail-body">
+      <aside class="detail-aside">
+        <div class="dossier">
+          <div class="dossier-head mono">
+            <span>{copy.projectDetail.dossier}</span>
+          </div>
+          <dl class="dossier-rows">
+            <div>
+              <dt>{copy.projectDetail.family}</dt>
+              <dd>
+                <span class="family-code">
+                  {family.code} {family.label}
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.projectDetail.category}</dt>
+              <dd>{p.category}</dd>
+            </div>
+            <div>
+              <dt>{copy.projectDetail.status}</dt>
+              <dd>
+                <StatusBadge status={p.status} lang={lang} />
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.projectDetail.repository}</dt>
+              <dd>
+                <a href={p.repository} target="_blank" rel="noopener noreferrer">
+                  {repository?.fullName ?? p.repository.replace('https://github.com/', '')}
+                  <Icon name="arrow-up-right" size={12} />
+                </a>
+              </dd>
+            </div>
+          </dl>
+          <div class="dossier-stack">
+            <span class="mono">{copy.projectDetail.stack}</span>
+            <div class="tag-list">
+              {p.technologies.map((tech) => (
+                <span class="tag">{tech}</span>
+              ))}
+            </div>
+          </div>
+          <a
+            class="button button-secondary dossier-button"
+            href={p.repository}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="github" size={15} />
+            {copy.projectDetail.openRepo}
+          </a>
+        </div>
+      </aside>
+
+      <div class="detail-content">
+        <section data-reveal>
+          <span class="section-no mono">{copy.projectDetail.overview}</span>
+          <h2>{copy.projectDetail.overviewTitle}</h2>
+          <p class="detail-description">{p.description}</p>
+        </section>
+
+        {p.features.length > 0 && (
+          <section data-reveal>
+            <span class="section-no mono">{copy.projectDetail.capabilities}</span>
+            <h2>{copy.projectDetail.capabilitiesTitle}</h2>
+            <ul class="feature-list">
+              {p.features.map((feature) => (
+                <li>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {p.architecture.length > 0 && (
+          <section data-reveal>
+            <span class="section-no mono">{copy.projectDetail.underHood}</span>
+            <h2>{copy.projectDetail.underHoodTitle}</h2>
+            <ul class="arch-list">
+              {p.architecture.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section data-reveal>
+          <span class="section-no mono">{copy.projectDetail.state}</span>
+          <h2>
+            {release
+              ? `${copy.projectDetail.stateReleasePrefix}${release.tag}`
+              : copy.projectDetail.stateNoRelease}
+          </h2>
+          <div class="release-card">
+            <div class="release-version">
+              <span class="mono">{copy.projectDetail.releaseLabel}</span>
+              <strong>{release?.tag ?? '—'}</strong>
+            </div>
+            <div class="release-copy">
+              <span class="mono">
+                {release ? format(release.publishedAt) : copy.projectDetail.releaseDateUnknown}
+              </span>
+              <p>
+                {release
+                  ? copy.projectDetail.releaseDescription
+                  : copy.projectDetail.releaseDescriptionNoRelease}
+              </p>
+            </div>
+            <a
+              class="release-link"
+              href={release?.url ?? p.repository}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={
+                release
+                  ? `${copy.projectDetail.openReleaseNotes} ${release.tag} ${copy.projectDetail.openReleaseNotesSuffix}`
+                  : `${copy.projectDetail.openRepoAria} ${p.name} ${copy.projectDetail.openRepoAriaSuffix}`
+              }
+            >
+              <Icon name="arrow-up-right" size={17} />
+            </a>
+          </div>
+        </section>
+
+        <div class="record-note" data-reveal>
+          <span class="mono">{copy.projectDetail.recordEyebrow}</span>
+          <p>{copy.projectDetail.recordNote}</p>
+        </div>
+      </div>
+    </div>
+
+    {related.length > 0 && (
+      <section class="section site-container related">
+        <SectionHeading
+          eyebrow={copy.projectDetail.relatedEyebrow}
+          title={copy.projectDetail.relatedTitle}
+          href={localizePath('/projects', lang)}
+          linkLabel={`${copy.common.allApplicationsBefore} ${all.length} ${copy.common.allApplicationsAfter}`}
+          lang={lang}
+        />
+        <div class="project-grid">
+          {related.map((item) => (
+            <ProjectCard project={item} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .detail-hero {
+    position: relative;
+    padding-block: 1.35rem 0;
+    overflow: clip;
+  }
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+  .breadcrumb a:hover {
+    color: var(--z-primary);
+  }
+  .detail-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 0.82fr);
+    gap: clamp(1.75rem, 4.5vw, 4.5rem);
+    align-items: center;
+  }
+  .detail-label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .label-divider {
+    width: 1.25rem;
+    height: 1px;
+    background: var(--z-border-strong);
+  }
+  .detail-category {
+    color: var(--z-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0.85rem 0 0.75rem;
+    font-size: clamp(2.6rem, 5.2vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+  .detail-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--z-text-secondary);
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    line-height: 1.55;
+  }
+  .detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.5rem;
+  }
+  .detail-visual {
+    position: relative;
+    display: grid;
+    aspect-ratio: 16 / 10;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--z-border-strong);
+    border-radius: var(--z-radius);
+    background: var(--z-surface-raised);
+  }
+  .detail-visual > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .detail-visual::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+    background: linear-gradient(180deg, transparent 55%, rgba(4, 7, 13, 0.62));
+    pointer-events: none;
+  }
+  .detail-art {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--z-surface-raised);
+  }
+  .art-grid {
+    position: absolute;
+    inset: 1rem;
+    border: 1px solid var(--z-border);
+  }
+  .art-logo {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 5.4rem;
+    height: 5.4rem;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--project-accent) 45%, var(--z-border));
+    border-radius: 2px;
+    background: var(--z-surface-solid);
+    color: var(--project-accent-text);
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .art-logo img {
+    width: 3.2rem;
+    height: 3.2rem;
+    object-fit: contain;
+  }
+  .art-code {
+    position: absolute;
+    right: -0.05em;
+    bottom: -0.28em;
+    color: transparent;
+    font-family: var(--font-body);
+    font-size: 8rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.08em;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--project-accent) 40%, transparent);
+  }
+  .visual-caption {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.9rem;
+    left: 1rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+  .detail-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 2.5rem 0 0;
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .detail-meta div {
+    min-width: 0;
+    padding: 0.9rem 1.1rem;
+    border-right: 1px solid var(--z-border);
+  }
+  .detail-meta div:last-child {
+    border-right: 0;
+  }
+  dt {
+    color: var(--z-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .detail-meta dd {
+    overflow: hidden;
+    margin: 0.3rem 0 0;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 550;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .detail-body {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 760px);
+    gap: clamp(1.6rem, 3.2vw, 2.8rem);
+    padding-block: clamp(1.9rem, 3vw, 2.6rem);
+  }
+  .dossier {
+    position: sticky;
+    top: 5.25rem;
+    overflow: hidden;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .dossier-head {
+    padding: 0.75rem 0.95rem;
+    border-bottom: 1px solid var(--z-border);
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .dossier-rows {
+    margin: 0;
+    padding: 0.3rem 0.95rem;
+  }
+  .dossier-rows div {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--z-border);
+  }
+  .dossier-rows div:last-child {
+    border-bottom: 0;
+  }
+  .dossier-rows dd {
+    min-width: 0;
+    margin: 0;
+    color: var(--z-text-secondary);
+    font-size: 0.8rem;
+  }
+  .dossier-rows dd a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+  .dossier-rows dd a:hover {
+    color: var(--z-primary);
+  }
+  .dossier-rows :global(.family-code) {
+    font-size: 0.66rem;
+  }
+  .dossier-stack {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.75rem 0.95rem 0.95rem;
+    border-top: 1px solid var(--z-border);
+  }
+  .dossier-stack > .mono {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .dossier-button {
+    width: calc(100% - 1.9rem);
+    margin: 0 0.95rem 0.95rem;
+    min-height: 2.75rem;
+    border-radius: 2px;
+    font-size: 0.8rem;
+  }
+  .detail-content section + section {
+    margin-top: clamp(2.2rem, 4.5vw, 3.5rem);
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--z-border);
+  }
+  .section-no {
+    color: var(--project-accent-text);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+  .detail-content h2 {
+    margin: 0.55rem 0 1.1rem;
+    font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+    font-weight: 600;
+  }
+  .detail-description {
+    margin: 0;
+    color: var(--z-text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .feature-list li {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--z-border);
+    color: var(--z-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+  .arch-list {
+    position: relative;
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0 0 0 1.25rem;
+    list-style: none;
+    border-left: 1px solid var(--z-border-strong);
+  }
+  .arch-list li {
+    position: relative;
+    padding: 0.7rem 0;
+    color: var(--z-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+  .arch-list li::before {
+    position: absolute;
+    top: 1.4rem;
+    left: -1.25rem;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 1px;
+    content: '';
+    background: var(--project-accent);
+    transform: translateX(-50%);
+  }
+  .release-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.2rem;
+    align-items: center;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+  .release-version {
+    display: grid;
+    gap: 0.2rem;
+    padding-right: 1.5rem;
+    border-right: 1px solid var(--z-border);
+  }
+  .release-version span {
+    color: var(--z-text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.09em;
+  }
+  .release-version strong {
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+  .release-copy {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .release-copy .mono {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+  }
+  .release-copy p {
+    margin: 0;
+    color: var(--z-text-muted);
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .release-link {
+    display: grid;
+    width: 2.3rem;
+    height: 2.3rem;
+    place-items: center;
+    border: 1px solid var(--z-border);
+    border-radius: 2px;
+    color: var(--z-text-secondary);
+    transition:
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+  .release-link:hover {
+    border-color: var(--project-accent);
+    color: var(--project-accent-text);
+  }
+  .record-note {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 0.9rem;
+    margin-top: 1.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--z-border);
+  }
+  .record-note span {
+    color: var(--z-text-muted);
+    font-size: 0.64rem;
+    letter-spacing: 0.06em;
+  }
+  .record-note p {
+    max-width: 640px;
+    margin: 0;
+    color: var(--z-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+  .related {
+    border-top: 1px solid var(--z-border);
+  }
+  @media (max-width: 1000px) {
+    .detail-main {
+      grid-template-columns: 1fr;
+    }
+    .detail-visual {
+      width: min(100%, 620px);
+      aspect-ratio: 16 / 10;
+    }
+    .detail-body {
+      grid-template-columns: 1fr;
+    }
+    .dossier {
+      position: static;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .dossier-head {
+      grid-column: 1 / -1;
+    }
+    .dossier-rows {
+      border-right: 1px solid var(--z-border);
+    }
+    .dossier-stack {
+      border-top: 0;
+    }
+    .dossier-button {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 700px) {
+    .detail-hero {
+      padding-top: 1.1rem;
+    }
+    .breadcrumb {
+      margin-bottom: 1.4rem;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 9vw, 3rem);
+      letter-spacing: -0.04em;
+    }
+    .detail-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+    .detail-actions .button {
+      width: 100%;
+    }
+    .detail-meta {
+      grid-template-columns: 1fr 1fr;
+      margin-top: 1.6rem;
+    }
+    .record-note {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .detail-meta div:nth-child(2) {
+      border-right: 0;
+    }
+    .detail-meta div:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--z-border);
+    }
+    .detail-meta div {
+      padding: 0.8rem 0.85rem;
+    }
+    .dossier {
+      grid-template-columns: 1fr;
+    }
+    .dossier-rows {
+      border-right: 0;
+    }
+    .dossier-stack {
+      border-top: 1px solid var(--z-border);
+    }
+    .feature-list {
+      grid-template-columns: 1fr;
+    }
+    .release-card {
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+    }
+    .release-version {
+      padding-right: 0;
+      border-right: 0;
+    }
+    .release-copy {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+    .release-link {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .visual-caption {
+      display: none;
+    }
+  }
+</style>

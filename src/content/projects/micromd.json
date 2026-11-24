@@ -1,0 +1,30 @@
+{
+  "name": "MicroMD",
+  "series": "Nano",
+  "category": "Markdown Reader",
+  "status": "released",
+  "tagline": "A 3 MB single-file Markdown reader for Windows.",
+  "description": "Windows 上约 3 MB 的单文件 Markdown 阅读器：原生 Win32 窗口 + WebView2 外壳，界面是一个零依赖 HTML 文件，所有渲染在本地完成、不联网。提供实时分栏预览、三种布局、明暗主题、草稿自动保存与大文件降频保护。",
+  "featured": false,
+  "displayOrder": 140,
+  "repository": "https://github.com/zhoujungis/micromd",
+  "technologies": ["Go", "WebView2", "Vanilla HTML/JavaScript", "GitHub Actions"],
+  "features": [
+    "实时分栏预览，分隔条可拖动、滚动同步",
+    "分栏、纯预览、纯编辑三种布局",
+    "明暗主题跟随系统并可手动切换",
+    "草稿自动保存，字数统计与阅读时长",
+    "超过 200 KB 的大文件降低渲染频率",
+    "原始 HTML 转义显示，危险链接被丢弃"
+  ],
+  "architecture": [
+    "main.go 提供 Win32 窗口、WebView2 外壳与原生文件对话框",
+    "web/index.html 单文件包含界面与手写 Markdown 解析器",
+    "页面资源内嵌 exe，首次运行解压到本地目录",
+    "命令行或拖拽打开的文档可直接写回原文件",
+    "release.yml 在 tag 推送时构建并发布 exe 与 SHA256"
+  ],
+  "logo": "/images/projects/micromd.png",
+  "accent": "#2B6BE4",
+  "keywords": ["markdown", "desktop", "webview2", "go", "single-executable"]
+}

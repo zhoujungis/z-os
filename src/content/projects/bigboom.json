@@ -1,0 +1,29 @@
+{
+  "name": "BigBoom",
+  "series": "Nano",
+  "category": "Log Analysis",
+  "status": "active",
+  "tagline": "PyQt6 stress-test log analyzer for embedded devices.",
+  "description": "基于 PyQt6 的桌面工具，用于分析嵌入式设备压测日志。它按可配置正则提取关键打印、识别循环边界并统计成功率，计算关键时间间隔并标记超时，同时按测试类别扫描异常行为，结果可导出 PDF 与 Excel。",
+  "featured": false,
+  "displayOrder": 150,
+  "repository": "https://github.com/zhoujungis/serial_key_info_detect_and_anomaly_detection",
+  "technologies": ["Python", "PyQt6", "matplotlib", "reportlab", "openpyxl"],
+  "features": [
+    "关键打印检测与循环边界识别，统计循环成功率",
+    "起止正则配对计算关键时间间隔并标记超时",
+    "按测试类别扫描异常关键字与行为",
+    "开关机专项分析，含电量折线图与电压散点图",
+    "多设备批量分析与实时监听",
+    "导出带水印 PDF 与分 sheet Excel 报告"
+  ],
+  "architecture": [
+    "GUI 与分析引擎集中在 log_key_info_analize.py",
+    "检测规则外置为 config/ 下的 JSON，可在界面编辑",
+    "matplotlib 在 Qt 内绘图，reportlab 与 openpyxl 导出",
+    "完整循环摘录为独立文件写入输出目录",
+    "PyInstaller 打包为无控制台窗口的 exe"
+  ],
+  "accent": "#EA580C",
+  "keywords": ["pyqt6", "log-analysis", "embedded", "stress-test", "desktop"]
+}

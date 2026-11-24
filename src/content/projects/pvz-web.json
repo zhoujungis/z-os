@@ -1,0 +1,30 @@
+{
+  "name": "PvZ Web",
+  "series": "Play",
+  "category": "Tower Defense Game",
+  "status": "released",
+  "tagline": "A 60-level Plants vs. Zombies fan game in vanilla JS.",
+  "description": "零依赖、原生 JavaScript + Canvas 2D 编写的植物大战僵尸同人游戏，双击 index.html 即可游玩。冒险模式共 60 关，另有砸罐子、我是僵尸与无尽生存三种模式，含 24 种植物与 16 种僵尸。作者声明与 PopCap Games / EA 无关，素材版权归原版权方。",
+  "featured": false,
+  "displayOrder": 280,
+  "repository": "https://github.com/zhoujungis/pvz",
+  "technologies": ["Vanilla JavaScript", "Canvas 2D", "localStorage", "Playwright"],
+  "features": [
+    "冒险模式 60 关，六章主题战场",
+    "24 种植物与 16 种僵尸",
+    "砸罐子、我是僵尸与无尽生存模式",
+    "阳光经济、波次进攻与卡牌冷却",
+    "水面、屋顶、墓碑等地形机制",
+    "进度本地保存并支持旧存档迁移"
+  ],
+  "architecture": [
+    "单文件 game.js 承载渲染、AI、关卡与模式逻辑",
+    "1280×720 Canvas，单个 rAF 循环驱动",
+    "GIF 素材与程序动画双轨",
+    "素材多源回退",
+    "暴露测试钩子供 Playwright 注入关卡状态"
+  ],
+  "cover": "/images/projects/pvz-cover.webp",
+  "accent": "#7DA845",
+  "keywords": ["plants-vs-zombies", "tower-defense", "canvas", "fan-game"]
+}

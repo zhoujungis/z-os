@@ -1,0 +1,36 @@
+{
+  "name": "ShuGe",
+  "series": "Cloud",
+  "category": "Knowledge Base",
+  "status": "active",
+  "tagline": "Serverless Chinese RAG knowledge base on Cloudflare.",
+  "description": "构建在 Cloudflare 全家桶上的中文 RAG 知识库，支持 PDF、Office、Markdown、网页与 GitHub 仓库等来源。文档上传后自动解析、分块、向量化并建立关键词索引，检索采用向量与 BM25 混合排序，流式回答附页码级引用。",
+  "featured": false,
+  "displayOrder": 200,
+  "repository": "https://github.com/zhoujungis/knowledge_base",
+  "technologies": [
+    "Cloudflare Pages Functions",
+    "Hono",
+    "Cloudflare D1",
+    "Cloudflare R2",
+    "Cloudflare Vectorize",
+    "React 18"
+  ],
+  "features": [
+    "多格式文档解析与网页、GitHub、RSS 导入",
+    "Vectorize 语义检索与自建 BM25 倒排索引",
+    "RRF 融合后按向量、关键词覆盖与结构匹配精排",
+    "三种对话模式与 SSE 流式引用回答",
+    "owner / editor / viewer 三级成员权限",
+    "模型、Prompt 版本管理与审计日志"
+  ],
+  "architecture": [
+    "Pages Functions 挂载 Hono 路由，D1 存业务数据，R2 存原文件",
+    "上传后经 waitUntil 异步执行解析、分块、向量化与索引",
+    "BM25 通过 D1 倒排索引实现，替代 SQLite FTS5",
+    "密码 PBKDF2 加盐，JWT 搭配轮换 Refresh Token",
+    "检索结果做提示词注入检测并保存引用"
+  ],
+  "accent": "#B33A2B",
+  "keywords": ["rag", "hybrid-search", "bm25", "vectorize", "cloudflare"]
+}

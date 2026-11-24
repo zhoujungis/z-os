@@ -1,0 +1,10 @@
+{
+  "name": "Block World 3D",
+  "description": "类 Minecraft 的体素沙盒浏览器入口，完整生存玩法需使用 Electron 桌面端。",
+  "category": "3D Sandbox",
+  "url": "https://block-world-3d.pages.dev/",
+  "sourceUrl": "https://github.com/zhoujungis/block_world_3d",
+  "projectSlug": "block-world-3d",
+  "serviceId": "block-world",
+  "displayOrder": 40
+}

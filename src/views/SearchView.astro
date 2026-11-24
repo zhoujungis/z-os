@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchResults from '../components/search/SearchResults.vue';
+import { getCopy } from '../i18n/ui';
+import { localizePath } from '../i18n';
+import type { Lang } from '../types/domain';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = getCopy(lang);
+const suggestions =
+  lang === 'zh' ? ['NanoBrowser', 'Rust', '桌面'] : ['NanoBrowser', 'Rust', 'desktop'];
+---
+
+<BaseLayout
+  lang={lang}
+  title={copy.pageTitles.search}
+  description={copy.seo.searchDescription}
+  noindex={true}
+>
+  <header class="page-hero site-container">
+    <div>
+      <p class="eyebrow">{copy.searchPage.eyebrow}</p>
+      <h1>
+        {copy.searchPage.titleA} <em>{copy.searchPage.titleEm}</em>
+      </h1>
+    </div>
+    <p>{copy.searchPage.body}</p>
+  </header>
+  <section class="site-container section-compact search-body">
+    <SearchResults
+      client:load
+      labels={copy.searchResults}
+      suggestions={suggestions}
+      indexUrl={localizePath('/search-index.json', lang)}
+      projectsHref={localizePath('/projects', lang)}
+    />
+    <noscript>
+      <p class="noscript-note">
+        {copy.searchPage.noscript}
+        <a href={localizePath('/projects', lang)}>{copy.searchPage.noscriptLink}</a>
+      </p>
+    </noscript>
+  </section>
+</BaseLayout>
+<style>
+  .search-body {
+    max-width: 1040px;
+    margin-inline: auto;
+  }
+  .noscript-note {
+    margin: 1.5rem 0 0;
+    padding: 1.1rem;
+    border: 1px dashed var(--z-border-strong);
+    border-radius: var(--z-radius);
+    color: var(--z-text-muted);
+    text-align: center;
+  }
+  .noscript-note a {
+    color: var(--z-primary);
+  }
+</style>

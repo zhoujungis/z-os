@@ -1,0 +1,42 @@
+{
+  "name": "z-memory",
+  "series": "Z",
+  "category": "AI Infrastructure",
+  "status": "released",
+  "tagline": "Local-first, structured memory infrastructure for AI agents.",
+  "description": "面向 AI 的本地优先记忆基础设施，提供 Windows 桌面应用与输出 JSON 的 CLI。它把交互中的持久信息整理为带来源的结构化记忆，通过关键词与本地语义向量混合检索，并支持去重、冲突处理、审计和完整导入导出。",
+  "featured": true,
+  "displayOrder": 80,
+  "repository": "https://github.com/zhoujungis/z-memory",
+  "technologies": [
+    "Tauri 2",
+    "Vue 3",
+    "TypeScript",
+    "Rust",
+    "Pinia",
+    "SQLite",
+    "FTS5",
+    "BM25",
+    "OpenAI-compatible API"
+  ],
+  "features": [
+    "桌面端与 JSON CLI 共用同一本地数据库",
+    "离线规则提取记忆，可选接入兼容模型",
+    "记忆候选支持审核、去重、强化与冲突解决",
+    "FTS5 BM25 与本地向量执行混合检索",
+    "来源摘录、评分明细与事件时间线便于解释",
+    "支持归档、过期、删除及多格式导入导出"
+  ],
+  "architecture": [
+    "Vue 与 Pinia 通过类型化服务层调用 Tauri IPC",
+    "Rust 核心统一处理提取、检索与生命周期",
+    "桌面 UI 和 CLI 复用同一记忆服务",
+    "SQLite 保存记忆、来源、事件与审计数据",
+    "FTS5 和本地向量在 Rust 中完成融合排序",
+    "凭据保护、信任等级与人工审核约束数据入口"
+  ],
+  "logo": "/images/projects/z-memory.svg",
+  "cover": "/images/projects/z-memory-cover.webp",
+  "accent": "#5B5BD6",
+  "keywords": ["AI memory", "local-first", "hybrid retrieval", "CLI", "SQLite", "Tauri"]
+}

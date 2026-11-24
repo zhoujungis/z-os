@@ -1,0 +1,36 @@
+{
+  "name": "Fortune",
+  "series": "Cloud",
+  "category": "AI Web App",
+  "status": "active",
+  "tagline": "GPT-backed fortune-telling experience on Cloudflare Workers.",
+  "description": "基于 GPT 大模型与 Cloudflare Workers 的命理推演应用，前端是 Vue 3 结果页。用户按分步表单提交生辰与关注方向，每次推演消耗积分并返回幸运色、性格投射、核心分析与可执行建议。后端用 D1 记录用户、积分与推演日志。",
+  "featured": true,
+  "displayOrder": 40,
+  "repository": "https://github.com/zhoujungis/fortune",
+  "technologies": [
+    "Cloudflare Workers",
+    "TypeScript",
+    "Cloudflare D1",
+    "Vue 3",
+    "Tailwind CSS",
+    "ModelFlare Responses API"
+  ],
+  "features": [
+    "分步表单收集生辰、幸运色、季节与关注方向",
+    "结果页包含毛玻璃、动态色彩与分享卡",
+    "推演返回幸运色、共振分、关键词、性格分析与建议",
+    "邮箱验证后赠送积分，每次成功推演扣减",
+    "提供 /health 健康检查，返回模型与 D1 状态"
+  ],
+  "architecture": [
+    "Worker 统一处理路由、CORS、参数校验、模型调用与 D1 日志",
+    "System Prompt 强制模型输出指定字段的 JSON，不合规时自动重试一次",
+    "积分以带余额条件的原子 UPDATE 扣除，推演日志异步写入",
+    "API Key 通过 wrangler secret 注入，响应设置 no-store",
+    "前端构建产物作为 Worker 静态资源发布"
+  ],
+  "cover": "/images/projects/fortune-cover.webp",
+  "accent": "#C2543A",
+  "keywords": ["fortune", "llm", "cloudflare-workers", "d1", "vue"]
+}

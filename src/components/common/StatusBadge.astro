@@ -1,0 +1,21 @@
+---
+import { getCopy } from '../../i18n/ui';
+import type { Lang } from '../../types/domain';
+interface Props {
+  status:
+    | 'released'
+    | 'active'
+    | 'experimental'
+    | 'archived'
+    | 'planned'
+    | 'operational'
+    | 'degraded'
+    | 'outage'
+    | 'unknown';
+  lang?: Lang;
+}
+const { status, lang = 'zh' } = Astro.props;
+const labels = getCopy(lang).statusBadge;
+---
+
+<span class={`status-badge status-${status}`}>{labels[status]}</span>
