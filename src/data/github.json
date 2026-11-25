@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "lastAttemptAt": "2026-11-18T10:00:34.374Z",
-  "lastSuccessfulAt": "2026-11-18T10:00:34.374Z",
+  "lastAttemptAt": "2026-11-25T08:18:36.458Z",
+  "lastSuccessfulAt": "2026-11-25T08:18:36.458Z",
   "repositories": [
     {
       "key": "ai-devops",
@@ -147,19 +147,19 @@
       "description": "HALO Music 是一个基于 Cloudflare Pages、Pages Functions 和 D1 的在线音乐应用，同时提供 Electron 桌面客户端。它把多个平台的搜索结果统一成 HALO Track 数据结构，在浏览器端完成搜索、播放、歌词和歌单交互，在服务端负责鉴权、缓存、音频解析和公开歌单导入。",
       "url": "https://github.com/zhoujungis/halo_music",
       "stars": 8,
-      "forks": 3,
+      "forks": 4,
       "language": "JavaScript",
       "topics": [
         "music",
         "music-player"
       ],
-      "pushedAt": "2026-11-17T04:18:49Z",
+      "pushedAt": "2026-11-20T09:30:03Z",
       "archived": false,
       "latestRelease": {
-        "tag": "v2.9.10",
-        "name": "HALO Music 2.9.10",
-        "url": "https://github.com/zhoujungis/halo_music/releases/tag/v2.9.10",
-        "publishedAt": "2026-11-17T04:24:06Z",
+        "tag": "v2.9.11",
+        "name": "HALO Music 2.9.11",
+        "url": "https://github.com/zhoujungis/halo_music/releases/tag/v2.9.11",
+        "publishedAt": "2026-11-20T09:34:56Z",
         "prerelease": false
       },
       "syncStatus": "success"
@@ -184,7 +184,7 @@
       "description": "快乐小游戏是一个纯用原生 HTML / CSS / JavaScript 写成的浏览器游戏厅。没有 React，没有 Vue，没有打包器，连一行构建脚本都没有——整个项目就是一堆可以双击打开的 HTML 文件，上传到 Cloudflare Pages 之后，就变成人人都能点开的线上版本。",
       "url": "https://github.com/zhoujungis/happy_games",
       "stars": 2,
-      "forks": 1,
+      "forks": 2,
       "language": "JavaScript",
       "topics": [],
       "pushedAt": "2026-09-14T07:39:20Z",
@@ -201,7 +201,7 @@
       "forks": 0,
       "language": "Python",
       "topics": [],
-      "pushedAt": "2026-11-18T08:54:09Z",
+      "pushedAt": "2026-11-24T11:21:31Z",
       "archived": false,
       "latestRelease": null,
       "syncStatus": "success"
@@ -305,7 +305,7 @@
       "fullName": "zhoujungis/NanoHermes",
       "description": "一个用 Rust 编写的轻量级、低内存终端编程智能体。NanoHermes 连接任意兼容 OpenAI 协议的大模型端点，为模型提供真实工具——读写编辑文件、搜索代码库、执行 shell 命令、应用补丁，以及通过模型上下文协议（MCP）调用外部工具",
       "url": "https://github.com/zhoujungis/NanoHermes",
-      "stars": 1,
+      "stars": 2,
       "forks": 0,
       "language": "Rust",
       "topics": [],
@@ -346,7 +346,7 @@
       "pushedAt": "2026-11-06T01:56:19Z",
       "archived": false,
       "latestRelease": null,
-      "syncStatus": "stale"
+      "syncStatus": "success"
     },
     {
       "key": "pvz-web",
@@ -393,7 +393,7 @@
       "pushedAt": "2026-08-28T06:12:01Z",
       "archived": false,
       "latestRelease": null,
-      "syncStatus": "stale"
+      "syncStatus": "success"
     },
     {
       "key": "stack-frame",
@@ -404,7 +404,7 @@
       "forks": 1,
       "language": "HTML",
       "topics": [],
-      "pushedAt": "2026-11-18T09:18:27Z",
+      "pushedAt": "2026-11-25T06:16:13Z",
       "archived": false,
       "latestRelease": null,
       "syncStatus": "success"
@@ -439,7 +439,7 @@
       "pushedAt": "2026-08-18T10:23:45Z",
       "archived": false,
       "latestRelease": null,
-      "syncStatus": "stale"
+      "syncStatus": "success"
     },
     {
       "key": "z-bot",
@@ -499,7 +499,7 @@
         "publishedAt": "2026-10-27T09:34:52Z",
         "prerelease": false
       },
-      "syncStatus": "stale"
+      "syncStatus": "success"
     }
   ]
 }
