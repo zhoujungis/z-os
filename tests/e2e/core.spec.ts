@@ -352,10 +352,14 @@ test('compact mobile controls remain visible and usable at 320px', async ({ page
   await expect(page.getByRole('button', { name: '搜索站点' })).toBeVisible();
   await expect(page.getByRole('button', { name: '打开导航' })).toBeVisible();
   await expect(page.getByRole('link', { name: '切换到英文' })).toBeVisible();
+  const themeButton =
+    (await page.locator('html').getAttribute('data-theme')) === 'dark'
+      ? '切换到亮色主题'
+      : '切换到暗色主题';
   for (const control of [
     page.getByRole('button', { name: '搜索站点' }),
     page.getByRole('link', { name: '切换到英文' }),
-    page.getByRole('button', { name: '切换到亮色主题' }),
+    page.getByRole('button', { name: themeButton }),
     page.getByRole('button', { name: '打开导航' }),
   ]) {
     const box = await control.boundingBox();
