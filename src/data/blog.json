@@ -1,7 +1,13 @@
 {
   "schemaVersion": 1,
-  "lastSuccessfulAt": "2026-11-25T10:31:26.661Z",
+  "lastSuccessfulAt": "2026-11-26T10:04:17.309Z",
   "posts": [
+    {
+      "title": "DevBox：把 42 个在线工具做成一个可维护的产品，而不是 42 个页面",
+      "description": "适用读者：写过几个「小工具页面」，然后发现它们要么各写一套布局、要么三个月后没人敢加第 10 个功能的前端工程师；正在用 Vue 3 + Vite 做一个多入口、多路由站点，却不想让首页 bundle 越滚越大的人；以及任何被「在线工具站」这类项目低估过的人——42 个工具的集合，难点从来不是那 42 个算法。 结论先",
+      "url": "https://blog.zhoujun.dev/article/devbox-registry-driven-toolbox/",
+      "publishedAt": "2026-11-26T03:03:05.000Z"
+    },
     {
       "title": "花园保卫战：用 3700 行原生 JS 手搓一个植物大战僵尸",
       "description": "适用读者：写过页面、但没独立做过一个\"能玩\"的游戏的人；想搞清楚一帧到底是什么、游戏循环该怎么写的前端工程师；以及任何被\"没有引擎就做不出游戏\"这句话劝退过的人。 结论先行：花园保卫战是一个零依赖、零构建、纯原生 JavaScript 写的植物大战僵尸同人游戏。全部逻辑塞在一个 3,731 行的 game.js 里，一",
@@ -115,12 +121,6 @@
       "description": "适用读者：想用 Go 加 WebView 做轻量桌面工具，或正在处理终端字节流、SSH 协议细节的开发者。 结论先行：这个项目的关键不在功能数量，而在几处容易错的边界：IPC 的序列化方式、终端字节流的反压、PTY 参数顺序、主机密钥信任模型和 Windows 平台细节。 阅读时间约 30 分钟 | 难度：进阶 | 收",
       "url": "https://blog.zhoujun.dev/article/nanoss-windows-ssh-client/",
       "publishedAt": "2026-11-05T02:32:27.000Z"
-    },
-    {
-      "title": "搜索：从倒排索引到 PostgreSQL、Elasticsearch 选型",
-      "description": "适用读者：正在用 LIKE '%关键词%' 做站内搜索、发现数据一多就慢得没法用的人；在 PostgreSQL 全文检索和 Elasticsearch 之间摇摆的人；已经上了搜索引擎，但搜索结果不相关、索引还经常不同步的人 结论先行：模糊匹配慢，不是索引没加对，而是 B+ 树按完整字符串排序，天生回答不了「中间包含什么",
-      "url": "https://blog.zhoujun.dev/article/search-inverted-index-to-engine/",
-      "publishedAt": "2026-11-04T04:20:53.000Z"
     }
   ]
 }

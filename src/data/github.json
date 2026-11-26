@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "lastAttemptAt": "2026-11-25T10:31:24.644Z",
-  "lastSuccessfulAt": "2026-11-25T10:31:24.644Z",
+  "lastAttemptAt": "2026-11-26T10:04:15.738Z",
+  "lastSuccessfulAt": "2026-11-26T10:04:15.738Z",
   "repositories": [
     {
       "key": "ai-devops",
@@ -144,7 +144,7 @@
     {
       "key": "halo-music",
       "fullName": "zhoujungis/halo_music",
-      "description": "HALO Music 是一个基于 Cloudflare Pages、Pages Functions 和 D1 的在线音乐应用，同时提供 Electron 桌面客户端。它把多个平台的搜索结果统一成 HALO Track 数据结构，在浏览器端完成搜索、播放、歌词和歌单交互，在服务端负责鉴权、缓存、音频解析和公开歌单导入。",
+      "description": "HALO Music 是一个基于 Cloudflare Pages、Pages Functions 和 D1 的支持睡眠模式、桌面透明歌词和离线管理的音乐平台应用，同时提供 Andriod客户端和Electron 桌面客户端。它把多个平台的搜索结果统一成 HALO Track 数据结构，在浏览器端完成搜索、播放、歌词和歌单交互，在服务端负责鉴权、缓存、音频解析和公开歌单导入。",
       "url": "https://github.com/zhoujungis/halo_music",
       "stars": 8,
       "forks": 4,
@@ -201,7 +201,7 @@
       "forks": 0,
       "language": "Python",
       "topics": [],
-      "pushedAt": "2026-11-25T10:13:22Z",
+      "pushedAt": "2026-11-26T09:46:24Z",
       "archived": false,
       "latestRelease": null,
       "syncStatus": "success"
@@ -404,7 +404,7 @@
       "forks": 1,
       "language": "HTML",
       "topics": [],
-      "pushedAt": "2026-11-25T06:16:13Z",
+      "pushedAt": "2026-11-26T03:25:39Z",
       "archived": false,
       "latestRelease": null,
       "syncStatus": "success"
