@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "lastAttemptAt": "2026-11-26T10:04:15.738Z",
-  "lastSuccessfulAt": "2026-11-26T10:04:15.738Z",
+  "lastAttemptAt": "2026-11-27T10:09:48.823Z",
+  "lastSuccessfulAt": "2026-11-27T10:09:48.823Z",
   "repositories": [
     {
       "key": "ai-devops",
@@ -197,11 +197,11 @@
       "fullName": "zhoujungis/InterviewAtlas",
       "description": "InterviewAtlas · 面经整合分析。由 GitHub Actions自动采集 牛客网 / 面试鸭 / 掘金 的国内公司面试经验，并由大模型基于此数据自动分析生成总结文档。累计收录超过3万条面试经验，覆盖超过150家公司，并由Github Actions持续更新与维护。",
       "url": "https://github.com/zhoujungis/InterviewAtlas",
-      "stars": 1,
+      "stars": 2,
       "forks": 0,
       "language": "Python",
       "topics": [],
-      "pushedAt": "2026-11-26T09:46:24Z",
+      "pushedAt": "2026-11-27T10:01:50Z",
       "archived": false,
       "latestRelease": null,
       "syncStatus": "success"
