@@ -6,8 +6,8 @@
       "name": "Blog",
       "url": "https://blog.zhoujun.dev",
       "status": "operational",
-      "checkedAt": "2026-11-27T09:41:45.942Z",
-      "responseMs": 261,
+      "checkedAt": "2026-11-28T08:55:47.310Z",
+      "responseMs": 252,
       "history": [
         {
           "checkedAt": "2026-11-25T09:52:10.062Z",
@@ -23,6 +23,11 @@
           "checkedAt": "2026-11-27T09:41:45.942Z",
           "status": "operational",
           "responseMs": 261
+        },
+        {
+          "checkedAt": "2026-11-28T08:55:47.310Z",
+          "status": "operational",
+          "responseMs": 252
         }
       ]
     },
@@ -31,8 +36,8 @@
       "name": "Music",
       "url": "https://music.zhoujun.dev/",
       "status": "operational",
-      "checkedAt": "2026-11-27T09:41:45.942Z",
-      "responseMs": 184,
+      "checkedAt": "2026-11-28T08:55:47.310Z",
+      "responseMs": 236,
       "history": [
         {
           "checkedAt": "2026-11-25T09:52:10.062Z",
@@ -48,6 +53,11 @@
           "checkedAt": "2026-11-27T09:41:45.942Z",
           "status": "operational",
           "responseMs": 184
+        },
+        {
+          "checkedAt": "2026-11-28T08:55:47.310Z",
+          "status": "operational",
+          "responseMs": 236
         }
       ]
     },
@@ -56,8 +66,8 @@
       "name": "Routewise",
       "url": "https://routewise-ai.pages.dev/",
       "status": "operational",
-      "checkedAt": "2026-11-27T09:41:45.942Z",
-      "responseMs": 197,
+      "checkedAt": "2026-11-28T08:55:47.310Z",
+      "responseMs": 281,
       "history": [
         {
           "checkedAt": "2026-11-25T09:52:10.062Z",
@@ -73,6 +83,11 @@
           "checkedAt": "2026-11-27T09:41:45.942Z",
           "status": "operational",
           "responseMs": 197
+        },
+        {
+          "checkedAt": "2026-11-28T08:55:47.310Z",
+          "status": "operational",
+          "responseMs": 281
         }
       ]
     },
@@ -81,8 +96,8 @@
       "name": "Happy Games",
       "url": "https://happy-games.pages.dev/",
       "status": "operational",
-      "checkedAt": "2026-11-27T09:41:45.942Z",
-      "responseMs": 234,
+      "checkedAt": "2026-11-28T08:55:47.310Z",
+      "responseMs": 397,
       "history": [
         {
           "checkedAt": "2026-11-25T09:52:10.062Z",
@@ -98,6 +113,11 @@
           "checkedAt": "2026-11-27T09:41:45.942Z",
           "status": "operational",
           "responseMs": 234
+        },
+        {
+          "checkedAt": "2026-11-28T08:55:47.310Z",
+          "status": "operational",
+          "responseMs": 397
         }
       ]
     },
@@ -106,8 +126,8 @@
       "name": "Block World 3D",
       "url": "https://block-world-3d.pages.dev/",
       "status": "operational",
-      "checkedAt": "2026-11-27T09:41:45.942Z",
-      "responseMs": 348,
+      "checkedAt": "2026-11-28T08:55:47.310Z",
+      "responseMs": 313,
       "history": [
         {
           "checkedAt": "2026-11-25T09:52:10.062Z",
@@ -123,6 +143,11 @@
           "checkedAt": "2026-11-27T09:41:45.942Z",
           "status": "operational",
           "responseMs": 348
+        },
+        {
+          "checkedAt": "2026-11-28T08:55:47.310Z",
+          "status": "operational",
+          "responseMs": 313
         }
       ]
     },
@@ -131,8 +156,8 @@
       "name": "Echo Space",
       "url": "https://echo-space-run.pages.dev/",
       "status": "operational",
-      "checkedAt": "2026-11-27T09:41:45.942Z",
-      "responseMs": 586,
+      "checkedAt": "2026-11-28T08:55:47.310Z",
+      "responseMs": 431,
       "history": [
         {
           "checkedAt": "2026-11-25T09:52:10.062Z",
@@ -148,6 +173,11 @@
           "checkedAt": "2026-11-27T09:41:45.942Z",
           "status": "operational",
           "responseMs": 586
+        },
+        {
+          "checkedAt": "2026-11-28T08:55:47.310Z",
+          "status": "operational",
+          "responseMs": 431
         }
       ]
     }
